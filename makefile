@@ -24,10 +24,12 @@ DEBUG=1
 
 all: # show all targets
 	grep -E "^[a-z]" makefile
-#----	
-copy_joeis: # CC=
+#----
+copy_lite: # CC= copy all from a joeis-lite package which exist in joeis
+	make copy_joeis LIST=$(FISCHER)/$(CC).gen
+copy_joeis: # LIST= copy the existing A-numbers in LIST from joeis to joeis-alt, and git-add them 
 	echo all: > $@.tmp
-	cut -b1-7 $(FISCHER)/$(CC).gen \
+	cut -b1-7 $(LIST) \
 	| perl -ne 's/\s//g; my $$java = "$$_.java"; my $$subdir = "src/irvine/oeis/" . lc(substr($$java,0, 4)); '\
 	'if (-r "../joeis/$$subdir/$$java") {'\
 	'  if (! -r $$subdir) { mkdir $$subdir; }'\

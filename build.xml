@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    ant-buildfile for joeis-alt
+    @(#) $Id$
+    2020-07-18, Georg Fischer: copied from joeis-lite
+-->
+
+<project name="joeis-alt" default="dist" basedir=".">
+    <property name="app.name"           value="joeis-alt"/>
+    <property name="app.version"        value="1.1"/>
+    <property name="app.main-class"     value="irvine.test.SequenceTest"/>
+    <property name="test"               value="%" />
+    <import file="build-import.xml" />
+
+    <target name="generate">
+    </target>
+    <target name="core.jar">
+    </target>
+    <target name="fill.lib">
+    </target>
+    <target name="test">
+    </target>
+
+</project>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    J2EE application descriptor
+    @(#) $Id$
+    2020-07-18, Georg Fischer: copied from joeis-lite
+-->
+<application
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:application="http://java.sun.com/xml/ns/javaee/application_5.xsd"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/j2ee/application_5.xsd"
+        version="5"
+        >
+    <description>Alternative Java implementation of the OEIS</description>
+    <display-name>joeis-alt</display-name>
+
+    <module>
+        <web>
+            <web-uri>joeis-alt.war</web-uri>
+            <context-root>/joeis-alt</context-root>
+        </web>
+    </module>
+</application>
