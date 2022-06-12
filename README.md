@@ -1,6 +1,4 @@
-# joeis-alt
-Alternative Java implementations of OEIS sequences. 
+# OEIS-prog
+Programs from the Online Encyclopedia Of Integer Sequences (https://oeis.org) with a uniform calling interface.
 
-This repository stores copies of source files from Sean Irvine's jOEIS project (cf. https://github.com/archmageirvine/joeis) such that two different implementations can be compared. A typical case is a "native" algorithm implementation in jOEIS and a linear recurrence or ordinary generating function in joeis-alt. 
-
-The alternative implementations are usually generated in the subproject https://github.com/gfis/joeis-lite.
+This repository stores copies of source files from the OEIS such that they can be called by the common interface of Sean Irvine's jOEIS project (cf. https://github.com/archmageirvine/joeis). It is related to project https://github.com/gfis/joeis-lite.
