@@ -1,0 +1,2 @@
+\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=1000 rev=35 timeout=8
+a(n) = my(f = factor(n)); for (i=1, #f~, f[i,1] -= 2); factorback(f);

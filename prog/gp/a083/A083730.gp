@@ -1,0 +1,2 @@
+\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=10000 rev=19 timeout=4
+a(n)=my(f=factor(n)); forstep(i=#f~,1,-1, if(f[i,2]>1, return(f[i,1]^2))); 1;
