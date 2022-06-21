@@ -1,2 +1,2 @@
-\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=54 rev=18 timeout=4
+\\ source=https://oeis.org/A200714 type=an offset=1 lang=pari curno=1 bfimax=54 rev=18 timeout=4
 a(n) = {if (n == 1, return (0)); tau = (1 + sqrt(5))/2; mn = 0; while ((m = round(mn*tau)) < n, mn++;); if (m == n, return (2*a(mn)+1)); mn = 0; while ((m = floor(mn*(1+tau)-tau/2)) < n, mn++;); if (m == n, return (2*a(mn))); error("neither A nor B !!");} \\ (cf C. Mongoven link) _Michel Marcus_, May 21 2013, Sep 02 2013;

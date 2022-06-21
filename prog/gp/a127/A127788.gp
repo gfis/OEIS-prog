@@ -1,2 +1,2 @@
-\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=10000 rev=22 timeout=8
+\\ source=https://oeis.org/A127788 type=an offset=1 lang=pari curno=1 bfimax=10000 rev=22 timeout=8
 {a(n) = my(v = [1, 3, 4, 6], A, p, e); if( n<1, 0, A = factor(n); for( k=1, matsize(A)[1], [p, e] = A[k,]; v[1] *= if( e==1, p-1, e==2, p^2-p-1, p^(e-3) * (p+1) * (p-1)^2); v[2] *= if( p==2, (e==3) - (e<3), e==1, kronecker(-4, p) - 1, e==2, -kronecker(-4, p)); v[3] *= if( p==3, (e==3) - (e<3), e==1, kronecker(-3, p) - 1, e==2, -kronecker(-3, p)); v[4] *= if( e%2, 0, e==2, p-2, p^(e/2-2) * (p-1)^2)); moebius(n) + (v[1] - v[2] - v[3] - v[4]) / 12 )};

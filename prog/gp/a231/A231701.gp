@@ -1,4 +1,4 @@
-\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=1000 rev=16 timeout=4
+\\ source=https://oeis.org/A231701 type=an offset=1 lang=pari curno=1 bfimax=1000 rev=16 timeout=4
 a(n) = my(len=3+(n-1)\90,   \
                  fs=10+((n-1)%90), \
                  f=fs\10,          \

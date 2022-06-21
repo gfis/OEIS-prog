@@ -1,2 +1,2 @@
-\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=61 rev=10 timeout=8
+\\ source=https://oeis.org/A138661 type=an offset=1 lang=pari curno=1 bfimax=61 rev=10 timeout=8
 {a(n) = my(A, p, e, x, y, a0, a1); if( n<1, 0, A = factor(n); prod(k=1, matsize(A)[1], [p, e] = A[k, ]; if( p==11, (-1331)^e, kronecker(-11, p)==-1, if(e%2, 0, (p^3)^e), for(x=1, sqrtint(4*p\11), if( issquare(4*p - 11*x^2, &y), break)); y = y^6 - 6*p*y^4 + 9*p^2*y^2 - 2*p^3; a0=1; a1=y; for(i=2, e, x = y * a1 - p^6 * a0; a0=a1; a1=x); a1)))};

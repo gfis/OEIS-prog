@@ -1,4 +1,4 @@
-\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=10000 rev=16 timeout=4
+\\ source=https://oeis.org/A254001 type=an offset=1 lang=pari curno=1 bfimax=10000 rev=16 timeout=4
 a(n) = {
 primeVect = factor(n)[,1];
 if(prod(i=1,#primeVect,1-1/primeVect[i])>=1/2,return(0));

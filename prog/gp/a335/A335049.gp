@@ -1,4 +1,4 @@
-\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=42 rev=5 timeout=4
+\\ source=https://oeis.org/A335049 type=an offset=1 lang=pari curno=1 bfimax=42 rev=5 timeout=4
 a(n) = {
     my (f=factor(n),
         m=if (#f~==0, 0, primepi(f[#f~, 1])),

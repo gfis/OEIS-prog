@@ -1,4 +1,4 @@
-\\ https://oeis.org/$aseqno type=an offset=1 curno=1 bfimax=8 rev=29 timeout=4
+\\ source=https://oeis.org/A193314 type=an offset=1 lang=pari curno=1 bfimax=8 rev=29 timeout=4
 a(n)={
   my(v=[Mod(0,1)],u,P=1,t,g,k);
   forprime(p=2,prime(n),
