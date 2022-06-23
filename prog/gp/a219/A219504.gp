@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A219504 lang=pari curno=1 type=an  rev=15 offset=0 bfimax=100 timeout=4 status=66
+{a(n)=local(A=[1],N);for(i=1,n,A=concat(A,0);N=#A;A[N]=(N-1)!*(1-Vec(sum(m=0,N-1,A[m+1]*x^m/m!*(cos(m*x+x*O(x^N))-sin(m*x+x*O(x^N)))))[N]));A[n+1]};

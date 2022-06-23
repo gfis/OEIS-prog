@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A238302 lang=pari curno=1 type=an  rev=10 offset=0 bfimax=277 timeout=4 status=59
+{a(n)=local(A=1+x); for(i=0, n, A=1+intformal(1/(1-x*A+x*O(x^n))^3 )); n!*polcoeff(A, n)};

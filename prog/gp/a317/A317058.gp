@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A317058 lang=pari curno=1 type=an  rev=51 offset=1 bfimax=9661 timeout=4 status=258
+a(n) = forcomposite(k=1,, if (sum(j=1,n, Mod(j,k)^(k-1)) == n, return (k)););

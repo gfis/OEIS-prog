@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A306404 lang=pari curno=1 type=an  rev=8 offset=0 bfimax=300 timeout=4 status=57
+{a(n) = my(A=1); for(i=1, n, A = (1 + intformal( A )) * (1 + intformal( A^3 +x*O(x^n))) ); n!*polcoeff(A, n)};

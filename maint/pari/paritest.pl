@@ -28,7 +28,7 @@ if (0 and scalar(@ARGV) == 0) {
     exit;
 }
 
-my $bfiledir = "../common/bfile";
+my $bfiledir = "../../OEIS-mat/common/bfile";
 my $debug    = 0; # 0 (none), 1 (some), 2 (more)
 my $startno  = "A000000"; # start behind this aseqno
 my $timeout  = 4; # in seconds

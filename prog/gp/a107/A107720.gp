@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A107720 lang=pari curno=1 type=an  rev=6 offset=0 bfimax=17 timeout=4 status=pass
+{a(n)=local(E,L,M=matrix(n+1,n+1,m,j,if(m>=j,if(m==j,1,if(m==j+1,-3*j, -polcoeff(1-(1+sum(c=1,m-j,prod(i=0,c-1,3*i+1)*x^c)+x*O(x^(m-j)))^-1,m-j);))))^-1); L=matrix(#M,#M,r,c,if(r>=c,sum(i=1,#M,(-1)^(i-1)*(M-M^0)^i/i)[r,c])); E=matrix(#L,#L,r,c,if(r>=c,sum(i=0,#L,L^i/3^i/i!)[r,c])); if(n<0,0,E[n+1,1])};

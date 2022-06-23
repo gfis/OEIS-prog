@@ -29,19 +29,19 @@ while (scalar(@ARGV) > 0 and ($ARGV[0] =~ m{\A[\-\+]})) {
     }
 } # while $opt
 
-my ($aseqno, $type, $offset, $code, $curno, $bfimax, $revision, $created, $author);
+my ($aseqno, $type, $offset, $code, $curno, $bfimax, $rev, $created, $author);
 my $nok; # if record is not to be repeated
 while (<>) { # read seq4 format
     $nok = 0; # assume success
     s/\s+\Z//; # chompr
     if (m{\AA\d{4}\d+\s}) { # starts with A.number
-        ($aseqno, $type, $offset, $code, $curno, $bfimax, $revision, $created, $author) = split(/\t/);
+        ($aseqno, $type, $offset, $code, $curno, $bfimax, $rev, $created, $author) = split(/\t/);
         &polish1();
         if ($nok eq "0") {
-            #                       aseqno  callcode offset   parm1  parm2   parm3    parm4      parm5     parm6
-            print        join("\t", $aseqno, $type,  $offset, $code, $curno, $bfimax, $revision, $created, $author) . "\n";
+            #                       aseqno  callcode offset   parm1  parm2   parm3    parm4 parm5     parm6
+            print        join("\t", $aseqno, $type,  $offset, $code, $curno, $bfimax, $rev, $created, $author) . "\n";
         } else {#                                                                                timeout
-            print STDERR join("\t", $aseqno, "$nok", $offset, $code, $curno, $bfimax, $revision, $created, $author) . "\n";
+            print STDERR join("\t", $aseqno, "$nok", $offset, $code, $curno, $bfimax, $rev, $created, $author) . "\n";
         }
     } # starts with A-number
 } # while seq4
@@ -55,26 +55,45 @@ sub polish1 { # global $type, $code, $created, $author
     # for(n=1,30,print1(a(n),", "))
     # for(n=1, 30, print1(a(n), ", "))
     # \\ _Lear Young_, Mar 01 2014
-    if ( ($last =~ s{\\\\ *(_[^_]+_)\, *(\w\w\w) (\d\d) (\d\d\d\d)\s*}        {}) ||
-         ($last =~ s{\/\* *(_[^_]+_)\, *(\w\w\w) (\d\d) (\d\d\d\d)\s*\*\/\s*} {})
+    if ( ($last =~ s{\\\\ *(_[^_]+_)\,? *(\w\w\w) (\d\d) (\d\d\d\d)\s*}        {}) ||
+         ($last =~ s{\/\* *(_[^_]+_)\,? *(\w\w\w) (\d\d) (\d\d\d\d)\s*\*\/\s*} {})
        ) { # remove author and created date
         my ($auth, $mon3, $day, $year) = ($1, $2, $3, $4);
         $author = $auth;
         $created = "$year-" . $months{$mon3} . "-$day";
     }
-    $last =~ s{\A *for *\(n *\= *\d+\, *\d+\, *print1?\( *a\(n\)(\, *\"\, *\")?\)\) *\Z}{}; # remove any trailing print(1)? loop
+    $last =~ s{ \\\\ .*} {}; # remove any comment on last line
+    $last =~ s{ \/\* .*} {};
+    # ; for(n=1,50,print1(a(n),","));
+    $last =~ s{\s*for\s*\(n\s*\=\s*\d+\,\s*\d+\,\s*print\(\s*a\(n\)\)\)\s*\;*\s*\Z}{}; # remove any trailing print() loop
+    $last =~ s{\s*for\s*\(n\s*\=\s*\d+\,\s*\d+\,\s*print1\(\s*a\(n\)\,\s*\"\,\s*\"\)\s*\)\s*\;*\s*\Z}{}; # remove any trailing print1() loop
+#   $last =~ s{\s*for\s*\(n\s*\=\s*\d+\,\s*\d+\,\s*print1?\(\s*a\(n\)(\,\s*\"\,\s*\")?\)\)\s*\;*\s*\Z}{}; # remove any trailing print(1)? loop
+    $last =~ s{\s+\Z}{}; # remove trailing whitespace
     if ($last =~ m{\A\s*\Z}) { # (became) empty
         splice(@lines, $len - 1, 1); # remove empty last line
-    } elsif ($code =~ m{print|alarm|iferr}) { # skip if there are still print, alarm, iferr commands
-        $nok = "priferr"; # sort it out
+    } elsif ($code =~ m{print}) { # skip if there are still print, alarm, iferr commands
+        $nok = "print"; # sort it out
+    } elsif ($code =~ m{alarm}) { 
+        $nok = "alarm";
+    } elsif ($code =~ m{iferr}) {
+        $nok = "priferr";
     } elsif ($code =~ m{(A\d{6})}) {
         $nok = "Annnnnn"; # skip if with A-number
     } else {
         $lines[$len - 1] = $last;
     }
     $code = join($sep, @lines);
-    if ($code !~ m{\; *\Z}) {
-        $code .= ";";
+    $code =~ s{([^\;]) *\Z}{$1;}; # append a ";" if there was none
+    if (0) {
+    } elsif ($type =~ m{(pari_an|an)\Z}) {
+    } elsif ($type =~ m{(pari_isok)\Z})  {
+        $code =~ s{(\A|\b)isok\(}{${1}isok\(}ig;
+        $code =~ s{(\A|\b)is\(}{${1}isok\(}ig;
+        if ($code =~ m{isok\(([nmkp])\)}) { 
+            # no need to normalize parameter -> "n"
+        } else { # two parameters
+            $nok = "isok(n,m)";
+        }
     }
 } # polish1
 __DATA__

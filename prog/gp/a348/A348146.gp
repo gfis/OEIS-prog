@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A348146 lang=pari curno=1 type=an  rev=17 offset=1 bfimax=61 timeout=4 status=pass
+a(n) = sumdiv(n, d, d!^(n-d));

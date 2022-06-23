@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A075397 lang=pari curno=1 type=an  rev=6 offset=1 bfimax=37 timeout=4 status=pass
+a(n) = local (pv, c, T, newT, x); pv = 1; c = 0; T = matrix(n, n); for (i = 1, min(n, 9), T[1 + n - i, 1 + i%n] = 1); for (k = 1, n - 1, pv = pv*10%n; newT = matrix(n - k, n); for (j = 1, n, newT[1, j] = T[1, j]); for (i = 2, n - k + 1, for (j = 1, n, x = T[i, j]; if (x, for (d = 1, min (i - 1, 9), newT[i - d, (j - 1 + d*pv)%n + 1] += x)))); T = newT); T[1, 1];

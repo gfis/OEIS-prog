@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A135882 lang=pari curno=1 type=an  rev=5 offset=0 bfimax=79 timeout=4 status=31
+{a(n)=local(P=Mat(1),R,PShR);if(n==0,1,for(i=0,n, PShR=matrix(#P,#P, r,c, if(r>=c,if(r==c,1,if(c==1,0,P[r-1,c-1]))));R=P*PShR; R=matrix(#P+1, #P+1, r,c, if(r>=c, if(r<#P+1,R[r,c], if(c==1,(P^2)[ #P,1],(P^(2*c-1))[r-c+1,1])))); P=matrix(#R, #R, r,c, if(r>=c, if(r<#R,P[r,c], (R^c)[r-c+1,1]))));P[n+2,2])};

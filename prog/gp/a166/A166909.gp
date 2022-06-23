@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A166909 lang=pari curno=1 type=an  rev=2 offset=0 bfimax=17 timeout=4 status=pass
+{a(n)=local(F=x, G=serreverse(x-x^2+O(x^(n+3))), M, N, P, m=n); M=matrix(m+2, m+2, r, c, F=x;for(i=1, r+c-2, F=subst(F, x, G+x*O(x^(m+3)))); polcoeff(F, c)); N=matrix(m+1, m+1, r, c, F=x;for(i=1, r, F=subst(F, x, G+x*O(x^(m+3)))); polcoeff(F, c)); P=matrix(n+1, n+1, r, c, M[r+1, c]); M=(P~*N~^-1); sum(k=1,n+1,M[n+1,k])};

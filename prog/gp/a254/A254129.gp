@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A254129 lang=pari curno=1 type=an  rev=82 offset=0 bfimax=550 timeout=4 status=18
+a(n)={my(l=listcreate(),v=vector(2*n+1));m=matrix(1,1);m[1,1]=1;listput(l,m);v[1]=1;for(i=2,2*n+1, m=matrix(4*i-3,4*i-3);for(j=1,#l[i-1],for(k=1,#l[i-1],m[j+2-2,k+2-1]+=l[i-1][j,k];m[j+2-2,k+2+1]+=l[i-1][j,k];m[j+2-1,k+2-2]+=l[i-1][j,k];m[j+2-1,k+2+2]+=l[i-1][j,k];m[j+2+1,k+2-2]+=l[i-1][j,k];m[j+2+1,k+2+2]+=l[i-1][j,k];m[j+2+2,k+2-1]+=l[i-1][j,k];m[j+2+2,k+2+1]+=l[i-1][j,k]));v[i]=m[2*i-1,2*i-1];listput(l,m););listput(l,v);v[#v]};
