@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A346499 lang=pari curno=1 type=isok  rev=81 offset=1 bfimax=1404 timeout=4 status=96 nstart=1
+isok(n) = { if(!isprime(n), return(0)); my(d = digits(n), f = vector(10), s); for(i = 1, #d, f[d[i]+1]++; if(f[d[i]+1] > 1 && d[i]!=0, return(0))); for(i = 1, #d, if(d[i] == 0 && f[i+1]>0, return(0) ); if(f[d[i]+1] > 0 && #d < d[i], return(0));  if(d[i] > 0 && d[d[i]] != i, return(0)); ); 1 };

@@ -29,19 +29,19 @@ while (scalar(@ARGV) > 0 and ($ARGV[0] =~ m{\A[\-\+]})) {
     }
 } # while $opt
 
-my ($aseqno, $type, $offset, $code, $curno, $bfimax, $rev, $created, $author);
+my                                 ($aseqno, $type,  $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart);
 my $nok; # if record is not to be repeated
 while (<>) { # read seq4 format
     $nok = 0; # assume success
     s/\s+\Z//; # chompr
     if (m{\AA\d{4}\d+\s}) { # starts with A.number
-        ($aseqno, $type, $offset, $code, $curno, $bfimax, $rev, $created, $author) = split(/\t/);
+        (                           $aseqno, $type,  $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart) = split(/\t/);
         &polish1();
         if ($nok eq "0") {
-            #                       aseqno  callcode offset   parm1  parm2   parm3    parm4 parm5     parm6
-            print        join("\t", $aseqno, $type,  $offset, $code, $curno, $bfimax, $rev, $created, $author) . "\n";
+            #                       aseqno  callcode offset   parm1  parm2   parm3    parm4 parm5     parm6    parm7
+            print        join("\t", $aseqno, $type,  $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart) . "\n";
         } else {#                                                                                timeout
-            print STDERR join("\t", $aseqno, "$nok", $offset, $code, $curno, $bfimax, $rev, $created, $author) . "\n";
+            print STDERR join("\t", $aseqno, "$nok", $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart) . "\n";
         }
     } # starts with A-number
 } # while seq4

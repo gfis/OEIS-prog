@@ -83,7 +83,9 @@ sub extract_attrs {
         $header =~ m{offset\=(\w+)};     my $offset  = $1;
         $header =~ m{bfimax\=(\w+)};     my $bfimax  = $1;
         $header =~ m{timeout\=(\w+)};    my $timeout = $1;
-        print join("\t", $aseqno, $lang, $curno, $type, $rev, $offset, $bfimax, $timeout, 'pass', '') . "\n";
+        $header =~ m{status\=(\w+)};     my $status  = $1 || 'pass';
+        $header =~ m{nstart\=(\w+)};     my $nstart  = $1 || $offset;
+        print join("\t", $aseqno, $lang, $curno, $type, $rev, $offset, $bfimax, $timeout, $status, $nstart) . "\n";
     }
 } # extract_attrs
 #----
@@ -104,7 +106,7 @@ CREATE  TABLE            poeis
     , bfimax   INT                   -- last index in b-file
     , timeout  VARCHAR(8)            -- default 4 
     , status   VARCHAR(16)           -- 'pass' (default) or the last index that was compared ok
-    , author   VARCHAR(64)           -- optional: author of the program or sequence
+    , nstart   INT                   -- start of for loop for terms
     , PRIMARY KEY(aseqno, lang, curno)
     );
 COMMIT;

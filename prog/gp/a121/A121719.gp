@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A121719 lang=pari curno=1 type=isok  rev=23 offset=1 bfimax=10000 timeout=4 status=pass nstart=4
+isok(n)=if(n<10, return(!isprime(n)&&n>1)); if(content(n=digits(n))>1, return(1)); if(vecsum(factor(n*=vectorv(#n, i, x^(#n-i)))[,2])>1, return(1)); forprime(p=2, #n-1, for(x=1, p, if(eval(n)%p, next(2))); return(1)); for(x=vecmax(Vec(n))+1, +oo, if(isprime(eval(n)), return(0)));

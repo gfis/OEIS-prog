@@ -26,7 +26,8 @@ pari_an: # generate seq4 format
 	wc -l    $@.*tmp
 pari_an0: # extract from db table asprog
 	# aseqno, callcode="pari_an", offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author
-	$(DBAT) "SELECT p.aseqno, 'pari_an', i.offset1, p.program, p.curno, b.bfimax, i.revision, SUBSTR(i.created, 0, 10), i.author \
+	$(DBAT) "SELECT p.aseqno, 'pari_an', i.offset1, p.program, p.curno, b.bfimax, i.revision \
+	    , SUBSTR(i.created, 0, 10), i.author, i.offset \
 	  FROM asprog p, bfinfo b, asinfo i \
 	  WHERE p.aseqno = i.aseqno \
 	    AND i.aseqno = b.aseqno \
@@ -44,8 +45,9 @@ pari_isok: # generate seq4 format
 	head -n4 $@.tmp
 	wc -l    $@.*tmp
 pari_isok0: # extract from db table asprog
-	# aseqno, callcode="pari_isok",  offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author
-	$(DBAT) "SELECT p.aseqno, 'pari_isok', i.offset1, p.program, p.curno, b.bfimax, i.revision, SUBSTR(i.created, 0, 10), i.author \
+	# aseqno, callcode="pari_isok",  offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author, parm7=nstart
+	$(DBAT) "SELECT p.aseqno, 'pari_isok', i.offset1, p.program, p.curno, b.bfimax, i.revision \
+	    , SUBSTR(i.created, 0, 10), i.author, REGEXP_SUBSTR(i.terms, '[\-0-9]') \
 	  FROM asprog p, bfinfo b, asinfo i \
 	  WHERE p.aseqno = i.aseqno \
 	    AND i.aseqno = b.aseqno \

@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A282391 lang=pari curno=1 type=isok  rev=12 offset=1 bfimax=10000 timeout=4 status=pass nstart=5
+isok(n) = numdiv(n) == numdiv(n+3*numdiv(n));

@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A352272 lang=pari curno=1 type=isok  rev=8 offset=1 bfimax=61 timeout=4 status=pass nstart=1
+isok(m) = core(m) % 6 == 1;

@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A308252 lang=pari curno=1 type=isok  rev=20 offset=1 bfimax=52 timeout=4 status=pass nstart=4
+isok(n) = {my(f=factor(n)[, 1]); if ((#f <= 1) || !issquarefree(n), return(0)); my(vd=digits(f[1]), d=vd[#vd], vd2, d2); if ((#f <= 1) || !issquarefree(n), return(0)); for (k=2, #f, vd2 = digits(f[k]); d2 = vd2[1]; if (d2 != d, return (0)); vd = vd2; d = vd[#vd];); return (1);};
