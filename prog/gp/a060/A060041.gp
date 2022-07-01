@@ -1,0 +1,2 @@
+\\ source=https://oeis.org/A060041 lang=pari curno=1 type=an  rev=47 offset=0 bfimax=301 timeout=4 status=126
+{a(n) = local(A1, A2, A3); if( n<1, 5*(n==0), A1 = sum( k=0, n, (5*k)! / k!^5 * (-x)^k, x * O(x^n)); A2 = -x * exp(5 / A1 * sum( k=0, n, (sum( i=1, 5*k, 1/i) - sum( i=1, k, 1/i)) * (5*k)! / k!^5 * (-x)^k, x * O(x^n))); A3 = subst(5 / A1^2 / (1 + 5^5*x) / (x * A2''/A2)^3, x, serreverse(A2)); sumdiv( n, k, moebius(n / k) * polcoeff(A3, k))/n^3)};

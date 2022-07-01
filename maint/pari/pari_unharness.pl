@@ -49,6 +49,7 @@ while (<>) { # read seq4 format
 sub polish1 { # global $type, $code, $created, $author
     my $sep   = substr($code, 0, 2);
     $code =~ s{ *\(Wasserman\) *}{};
+    # $code =~ s{\\\\}{\\}g; # remove JSON escaping
     my @lines = map { s/\'\'/\'/g; $_ } split(/$sep/, $code, 4); # double '' -> single '
     my $len   = scalar(@lines);
     my $last  = $lines[$len - 1];
@@ -62,8 +63,8 @@ sub polish1 { # global $type, $code, $created, $author
         $author = $auth;
         $created = "$year-" . $months{$mon3} . "-$day";
     }
-    $last =~ s{ \\\\ .*} {}; # remove any comment on last line
-    $last =~ s{ \/\* .*} {};
+    $last =~ s{ *\\\\.*} {}; # remove any comment on last line
+    $last =~ s{ *\/\*.*} {};
     # ; for(n=1,50,print1(a(n),","));
     $last =~ s{\s*for\s*\(n\s*\=\s*\d+\,\s*\d+\,\s*print\(\s*a\(n\)\)\)\s*\;*\s*\Z}{}; # remove any trailing print() loop
     $last =~ s{\s*for\s*\(n\s*\=\s*\d+\,\s*\d+\,\s*print1\(\s*a\(n\)\,\s*\"\,\s*\"\)\s*\)\s*\;*\s*\Z}{}; # remove any trailing print1() loop

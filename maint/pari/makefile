@@ -27,7 +27,7 @@ pari_an: # generate seq4 format
 pari_an0: # extract from db table asprog
 	# aseqno, callcode="pari_an", offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author
 	$(DBAT) "SELECT p.aseqno, 'pari_an', i.offset1, p.program, p.curno, b.bfimax, i.revision \
-	    , SUBSTR(i.created, 0, 10), i.author, i.offset \
+	    , SUBSTR(i.created, 0, 10), i.author, i.offset1 \
 	  FROM asprog p, bfinfo b, asinfo i \
 	  WHERE p.aseqno = i.aseqno \
 	    AND i.aseqno = b.aseqno \
