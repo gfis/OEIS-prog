@@ -82,7 +82,7 @@ extract_nyi: # prepare seq4 format for LODA programs suitable to be fed into com
 	wc -l    $@*tmp
 compile_loda:
 	grep -vP "\tlodas\t" extract_nyi.tmp \
-	| perl compile_loda.pl \
+	| perl -w compile_loda.pl \
 	2>       $@.rest.tmp \
 	| grep -P "\tloda\t" \
 	| head -n$(MANY) \
