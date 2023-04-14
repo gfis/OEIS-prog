@@ -35,18 +35,19 @@ while (scalar(@ARGV) > 0 and ($ARGV[0] =~ m{\A[\-\+]})) {
 } # while $opt
 
 my      ($aseqno, $callcode, $offset1, $name, $keyword, $range, $author, $formula, %instrs, $instr_list);
-$callcode = "loda";
 my $nok; # if record is not to be repeated
 while (<>) { # read seq4 format
     $nok = 0; # assume success
     s/\s+\Z//; # chompr
     if (m{\AA\d{4}\d+\s}) { # starts with A.number
         ($aseqno, $name, $keyword, $range, $author) = split(/\t/);
+        $author = $author || "";
         my $subdir = substr($aseqno, 1, 3);
         my $file = "$loda_path/$subdir/$aseqno.asm";
         $formula = "";
         %instrs = ();
         $instr_list = "";
+        $callcode = "loda";
         open(SRC, "<", $file) || die "cannot read $file\n";
         while (<SRC>) {
             s/\s+\Z//; # chompr
@@ -60,11 +61,32 @@ while (<>) { # read seq4 format
                 my $instr = $1;
                 my $opnds = $2;
                 $opnds =~ s{\$}{t}g;
-                if (! defined($subset{$instr})) {
-                    $nok = 2;
-                }
-                if ($line =~ m{\$\$}) {
-                    $nok = 3;
+                if (0) {
+                } elsif (! defined($subset{$instr})) {
+                    $nok .= 2; # unknown instruction
+                } elsif ($line =~ m{\$\$}) {
+                    $nok .= 3; # indirect reference
+                } elsif ($instr eq "lpb") {
+                    my ($op1, $op2) = split(/ *\, */, $opnds);
+                    if (defined($op2)) {
+                        if (substr($op2, 0, 1) eq "\$") {
+                            $nok .= 5; # lpb with dynamic range
+                        } else {
+                            # $nok .= 4; # lpb with range
+                        }
+                    } else {
+                        $opnds .= ",1"; # "lpb $0" -> "lpb $0,1"
+                    }
+                } elsif ($instr eq "clr") {
+                    my ($op1, $op2) = split(/ *\, */, $opnds);
+                    #   if (substr($op1, 0, 1) eq "\$") {
+                    #       $nok .= 6; # clr with dynamic range
+                    #   }
+                        if (substr($op2, 0, 1) eq "\$") {
+                            $nok .= 7; # clr with dynamic range
+                        }
+                } elsif ($instr eq "seq") {
+                    $callcode = "lodas";
                 }
                 $instr_list .= ";$instr $opnds";
             } else {
@@ -76,7 +98,8 @@ while (<>) { # read seq4 format
             # $instr_list = join("\,", grep { $_ !~ m{(mov|add|sub|mul|div)} } sort(keys(%instrs)));
             $range =~ m{\A(\-?\d+)\.\.(\-?\d+)};
             $offset1 = $1;
-            print        join("\t", $aseqno, $callcode, $offset1, substr($instr_list, 1), $formula, $name, $keyword, $range, $author) . "\n";
+            $instr_list =~ s{\A\;}{};
+            print        join("\t", $aseqno, $callcode, $offset1, $instr_list, $formula, $name, $keyword, $range, $author) . "\n";
         } else {
             print STDERR join("\t", $aseqno, $name, $keyword, $range, $author, $nok) . "\n";
         }

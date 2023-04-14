@@ -9,6 +9,8 @@ DBAT=java -jar ../../../dbat/dist/dbat.jar -e UTF-8 -c worddb
 DATE=`date +%Y-%m-%d`
 LOPROG=wrong/../../../loda/programs/oeis
 PROGS=../../../loda-programs/oeis
+MANY=444444
+
 all: load
 
 load:
@@ -72,15 +74,22 @@ list_nyi:
 	head -n4 $@.tmp
 	wc -l    $@.tmp
 #----
-extract_nyi:
-	perl extract_nyi.pl -s "mov,add,sub,mul,div,bin,pow,gcd,min,max,mod" list_nyi.tmp \
+extract_nyi: # prepare seq4 format for LODA programs suitable to be fed into compile_loda.pl
+	perl extract_nyi.pl -s   "mov,add,sub,mul,div,dif,cmp,trn,bin,pow,gcd,min,max,mod,clr,lpb,lpe,seq" list_nyi.tmp \
 	2>       $@.rest.tmp \
 	>        $@.tmp
 	head -n4 $@.tmp
 	wc -l    $@*tmp
-	# perl extract_nyi.pl -s "mov,add,sub,mul,div,dif,cmp,clr,trn,bin,pow,gcd,min,max,mod" list_nyi.tmp \
-	#
-gen_loda:
+compile_loda:
+	grep -vP "\tlodas\t" extract_nyi.tmp \
+	| perl compile_loda.pl \
+	2>       $@.rest.tmp \
+	| grep -P "\tloda\t" \
+	| head -n$(MANY) \
+	>        $@.gen
+	head -n4 $@.gen
+	wc -l    $@.gen $@.rest.tmp
+gen_loda: # old version, without clr,lpb,lpe
 	perl gen_loda.pl extract_nyi.tmp \
 	>        $@.gen
 	head -n4 $@.gen

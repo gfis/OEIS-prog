@@ -104,6 +104,12 @@ sub gener {
             $result .= "~~$op1 = $op1.$jhash{$instr}(" . &vali($op2) . ");"; # leave any constant
         } elsif ($instr =~ m{(mod)}) {
             $result .= "~~$op1 = $op1.$instr(" . &valz($op2) . ");"; # z-ify any constant
+        } elsif ($instr =~ m{(dif)}) { # divide only if divisible
+            $result .= "~~if ($op1.mod(" . &valz($op2) . ").isZero()) {~~  $op1 = $op1.divide(" . &valz($op2) . ");~~}"; # z-ify
+        } elsif ($instr =~ m{(trn)}) { # subtract, but remain >= 0
+            $result .= "~~$op1 = $op1.subtract(" . &valz($op2) . ");~~if ($op1.compareTo(Z.ZERO) < 0) {~~  $op1 = Z.ZERO;~~}"; # z-ify
+        } elsif ($instr =~ m{(cmp)}) { # equal ? 1 : 0
+            $result .= "~~$op1 = $op1.equals(" . &valz($op2) . ") ? Z.ONE : Z.ZERO;"; # z-ify
         } elsif ($instr =~ m{(bin)}) {
             $result .= "~~$op1 = Binomial.binomial($op1, " . &valz($op2) . ");"; # z-ify 
         } elsif ($instr =~ m{(gcd|min|max)}) {
