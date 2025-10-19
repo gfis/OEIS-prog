@@ -1,13 +1,15 @@
 #!make
 
-# makefile in gits/joeis-alt
-# @(#) $Id$
+# makefile in gits/OEIS-prog
+# @(#) $Id$ 
+# 2025-10-17: reattempt
 # 2020-07-18, Georg Fischer: copied from ../joeis-lite
 #----------------
-JOEIS=../../gitups/joeis
+JOEIS=../../gits/joeis
 GITS=..
 LITE=$(GITS)/joeis-lite
 FISCHER=$(LITE)/internal/fischer
+AMAN=$(FISCHER)/aman
 COMMON=$(GITS)/OEIS-mat/common
 LINREC=$(GITS)/OEIS-mat/linrec
 DBAT=java -jar $(GITS)/dbat/dist/dbat.jar -e UTF-8 -c worddb
@@ -40,4 +42,16 @@ copy_joeis: # LIST= copy the existing A-numbers in LIST from joeis to joeis-alt,
 	head -n4 $@.tmp
 	wc -l    $@.tmp
 	make -f  $@.tmp
-#----	
+#----
+paris_list: # list all nyi PARI programs
+	find prog/gp -iname "*.gp" | endirect \
+	| grep -P "\/A\d+"
+
+#----
+paris: # generate for paris.jpat from *.gp
+	find prog/gp -iname "*.gp" \
+	| endirect \
+	| grep -P "\/A\d+" > $@.tmp
+	perl paris_gen.pl    $@.tmp > $(AMAN)/$@.man
+	cd $(AMAN) ; head -n4 $@.man ; wc -l $@.man
+	
