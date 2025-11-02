@@ -1,6 +1,7 @@
 #!perl
 
-# Patch program files in prog/*
+# Extract data for table poeis from program files in prog/* 
+# 2025-11-02: reattempt
 # 2022-06-24, Georg Fischer: copied from patch_prog.pl
 #:# Usage:
 #:#     perl poeis_extract.-c > poeis.create.sql
@@ -15,7 +16,7 @@ if (0 and scalar(@ARGV) == 0) {
     exit;
 }
 my $debug    = 0; # 0 (none), 1 (some), 2 (more)
-my $action = "p"; # patch; x=extract
+my $action = "x"; # x=extract
 while (scalar(@ARGV) > 0 and ($ARGV[0] =~ m{\A[\-\+]})) {
     my $opt = shift(@ARGV);
     if (0) {
@@ -42,6 +43,7 @@ while (<>) {
             print "-- apath=$apath\n";
         }
         foreach my $name (glob("$apath/A*")) {
+            next if $name !~ m{\/A\d{6}\.\w*\Z};
             my $path = "$name";
             if ($debug >= 1 && $action ne "x") {
                 print "-- path=$path\n";
