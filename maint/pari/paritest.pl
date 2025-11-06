@@ -94,7 +94,7 @@ while (<>) { # read seq4 format
 sub test1 {
     # Run the test for one A-number until:
     # (1) the timeout stops the computation
-    # (2) there is a difference, and a windows of following terms will be shown
+    # (2) there is a difference, and a window of following terms will be shown
     # (3) the number of required terms (bfimax - bfimin + 1) is reached
     $index = $offset;
     my $state = $IN_READ;

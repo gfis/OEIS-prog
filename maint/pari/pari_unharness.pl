@@ -1,6 +1,6 @@
 #!perl
 
-# Remove trailing print commands, cut of comments and extract any author; double '' -> single '
+# Remove trailing print commands, cut off comments and extract any author; double '' -> single '
 # 2022-06-17, Georg Fischer
 #:# Usage:
 #:#   perl pari_unharness.pl input.seq4 > output.seq4
@@ -32,12 +32,14 @@ while (scalar(@ARGV) > 0 and ($ARGV[0] =~ m{\A[\-\+]})) {
 my                                 ($aseqno, $type,  $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart);
 my $nok; # if record is not to be repeated
 while (<>) { # read seq4 format
-    $nok = 0; # assume success
+    $nok = ""; # assume success
     s/\s+\Z//; # chompr
-    if (m{\AA\d{4}\d+\s}) { # starts with A.number
+    if (m{\AA\d+\s}) { # starts with A-number
         (                           $aseqno, $type,  $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart) = split(/\t/);
+        $author =~ s{_}{}g;    # remove surrounding "_"
+        $author =~ s{\s+}{_}g; # replace whitespace by "_"
         &polish1();
-        if ($nok eq "0") {
+        if ($nok eq "") {
             #                       aseqno  callcode offset   parm1  parm2   parm3    parm4 parm5     parm6    parm7
             print        join("\t", $aseqno, $type,  $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart) . "\n";
         } else {#                                                                                timeout
@@ -48,14 +50,15 @@ while (<>) { # read seq4 format
 
 sub polish1 { # global $type, $code, $created, $author
     my $sep   = substr($code, 0, 2);
-    $code =~ s{ *\(Wasserman\) *}{};
-    # $code =~ s{\\\\}{\\}g; # remove JSON escaping
-    my @lines = map { s/\'\'/\'/g; $_ } split(/$sep/, $code, 4); # double '' -> single '
+    # $code =~ s{\\\\}{\\}g; # remove JSON escaping 
+    $code =~ s/\'\'/\'/g; # double '' -> single '
+    my @lines = split(/$sep/, $code); # first line is empty
     my $len   = scalar(@lines);
     my $last  = $lines[$len - 1];
-    # for(n=1,30,print1(a(n),", "))
-    # for(n=1, 30, print1(a(n), ", "))
-    # \\ _Lear Young_, Mar 01 2014
+    if (!defined($last)) {
+        $nok = "nostmt";
+        return;
+    }
     if ( ($last =~ s{\\\\ *(_[^_]+_)\,? *(\w\w\w) (\d\d) (\d\d\d\d)\s*}        {}) ||
          ($last =~ s{\/\* *(_[^_]+_)\,? *(\w\w\w) (\d\d) (\d\d\d\d)\s*\*\/\s*} {})
        ) { # remove author and created date
@@ -84,6 +87,7 @@ sub polish1 { # global $type, $code, $created, $author
         $lines[$len - 1] = $last;
     }
     $code = join($sep, @lines);
+    #          1     1
     $code =~ s{([^\;]) *\Z}{$1;}; # append a ";" if there was none
     if (0) {
     } elsif ($type =~ m{(pari_an|an)\Z}) {
