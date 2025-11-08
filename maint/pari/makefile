@@ -1,7 +1,7 @@
 #!make
 
 # makefile in gits/OEIS-prog/maint/pari
-# @(#) $Id$ 
+# @(#) $Id$
 # 2025-11-03: reattempt
 # 2022-06-21, Georg Fischer
 #----------------
@@ -48,7 +48,7 @@ pari_isok0: # extract from db table asprog
 	    , i.revision, SUBSTR(i.created, 0, 10), i.author, REGEXP_SUBSTR(i.terms, '[\-0-9]') \
 	  FROM asprog p, bfinfo b, asinfo i \
 	  WHERE p.aseqno = i.aseqno \
-	    AND i.aseqno = b.aseqno \ 
+	    AND i.aseqno = b.aseqno \
 	    AND p.aseqno NOT IN ((SELECT aseqno FROM joeis) UNION (SELECT aseqno FROM poeis)) \
 	    AND p.lang   = 'pari' AND \
 	    (  LOWER(p.program) LIKE '~~~~isok(%' \
@@ -87,17 +87,16 @@ pari_decexp: # generate seq4 format
 	2>       $@.rest.tmp \
 	>        $@.tmp
 	tail -n4 $@.tmp
-	wc -l    $@.*tmp 
+	wc -l    $@.*tmp
 pari_decexp2:
 	perl ../gen_prog.pl pari_decexp.tmp
 paritest: # test all generated PARI programs in ../../sandbox/gp
 	find ../../sandbox/gp -iname "*.gp"  \
 	| perl -pe "s{[^A]+}{}; s{\.gp}{};" \
 	| tee $(FISCHER)/ghead.tmp
-	cd $(FISCHER) ; make CC=$@ test2 log 
+	cd $(FISCHER) ; make CC=$@ test2 log
 deploy: # move the "pass"ed ones into git repository
-	cut -f1 paritest.pass.log \
-	| xargs -innn echo "mv -v ../../sandbox/gp/nnn.gp ../../prog/gp/
-	
-
-
+	cut -f1 $(FISCHER)/paritest.pass.log > pass.tmp
+	find ../../sandbox -iname "*.gp" | grep -f pass.tmp \
+	| head -n$(MANY) \
+	| perl ../deploy_prog.pl
