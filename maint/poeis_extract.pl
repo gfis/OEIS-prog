@@ -68,9 +68,10 @@ while (<>) {
 #----
 sub extract_attrs {
     my @lines = split(/\n/, $code);
-    my ($lang, $curno, $type, $rev, $offset, $bfimax, $timeout, $status, $nstart);
+    my ($lang, $curno, $type, $rev, $offset, $bfimax, $timeout, $status, $nstart)
+    =  ("pari",1,      "an",  0,    0,       1,       1,        0,       0);
     my $header = $lines[0];
-    if ($header =~ m{\A(\\\\|\(\*|\/\*\#)}) { #starts with comment
+    if ($header =~ m{\A(\\\\|\(\*|\/\*|\#)}) { #starts with comment
         if ($header =~ m{ lang\=(\w+)}        ) { $lang    = $1; }
         if ($header =~ m{ curno\=(\w+)}       ) { $curno   = $1; }
         if ($header =~ m{ type\=(\w+)}        ) { $type    = $1; }

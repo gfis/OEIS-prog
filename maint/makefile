@@ -2,6 +2,7 @@
 
 # makefile in gits/OEIS-prog/maint
 # @(#) $Id$ 
+# 2025-11-09: poeis_eval; D-reunion=*36
 # 2025-10-17: reattempt
 # 2020-07-18, Georg Fischer: copied from ../joeis-lite
 #----------------
@@ -40,8 +41,15 @@ poeis_nyi: # determine the ones that are new, i.e. not yet implemented in jOEIS
 	$(DBAT) -x "SELECT aseqno, lang FROM poeis WHERE aseqno NOT IN (SELECT aseqno FROM joeis) ORDER BY 1" \
 	| tr -d "\r" \
 	| perl -pe 's{\tpari\Z}{\tPariSequence};' \
-	>        $@.txt
-	tail -n2 $@.txt
-	wc -l    $@.txt
-
+	>        $@.tmp
+	tail -n2 $@.tmp
+	wc -l    $@.tmp
+poeis_eval: # determine the ones that are new, i.e. not yet implemented in jOEIS
+	$(DBAT) -x "SELECT lang, type, COUNT(*) FROM poeis GROUP BY lang, type ORDER BY 1,2" \
+	| tr -d "\r" \
+	>        $@.tmp
+	$(DBAT) -x "SELECT lang, 'total', COUNT(*) FROM poeis GROUP BY lang       ORDER BY 1  " \
+	| tr -d "\r" \
+	>>       $@.tmp
+	cat      $@.tmp
 

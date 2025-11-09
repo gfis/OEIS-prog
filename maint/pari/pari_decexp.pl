@@ -55,7 +55,7 @@ sub polish1 { # global $type, $code, $created, $author
     if ($debug >= 1) {
         print "lines = [\"" . join("\",\"", @lines) . "\"]\n";
     }
-    if ($lines[2] !~ m{\A *default *\( *realprecision}) { 
+    if ($code !~ m{default *\( *realprecision}) { 
         my $prec = $bfimax + $bfimax / 5; # + 20%
         $lines[1] = "default(realprecision,$prec);";
         unshift(@lines, ""); # prefix with an empty line again

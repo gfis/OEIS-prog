@@ -1,7 +1,7 @@
 #!make
 
 # makefile in gits/OEIS-prog
-# @(#) $Id$ 
+# @(#) $Id$
 # 2025-10-17: reattempt
 # 2020-07-18, Georg Fischer: copied from ../joeis-lite
 #----------------
@@ -13,7 +13,7 @@ AMAN=$(FISCHER)/aman
 COMMON=$(GITS)/OEIS-mat/common
 LINREC=$(GITS)/OEIS-mat/linrec
 DBAT=java -jar $(GITS)/dbat/dist/dbat-lite.jar -e UTF-8 -c worddb
-WITHB=-b $(COMMON)/bfile 
+WITHB=-b $(COMMON)/bfile
 JOPT=-Doeis.big-factor-limit=1000000000 -Xmx2g
 BATLIT=java $(JOPT) -jar $(LITE)/dist/joeis-lite.jar  -v $(WITHB)
 BATCH=java $(JOPT) -cp $(JOEIS)/build.tmp/joeis.jar irvine.test.BatchTest -v $(WITHB)
@@ -29,7 +29,7 @@ all: # show all targets
 #----
 copy_lite: # CC= copy all from a joeis-lite package which exist in joeis
 	make copy_joeis LIST=$(FISCHER)/$(CC).gen
-copy_joeis: # LIST= copy the existing A-numbers in LIST from joeis to joeis-alt, and git-add them 
+copy_joeis: # LIST= copy the existing A-numbers in LIST from joeis to joeis-alt, and git-add them
 	echo all: > $@.tmp
 	cut -b1-7 $(LIST) \
 	| perl -ne 's/\s//g; my $$java = "$$_.java"; my $$subdir = "src/irvine/oeis/" . lc(substr($$java,0, 4)); '\
@@ -46,7 +46,6 @@ copy_joeis: # LIST= copy the existing A-numbers in LIST from joeis to joeis-alt,
 paris_list: # list all nyi PARI programs
 	find prog/gp -iname "*.gp" | endirect \
 	| grep -P "\/A\d+"
-
 #----
 paris: # generate for paris.jpat from *.gp
 	find prog/gp -iname "*.gp" \
@@ -54,16 +53,3 @@ paris: # generate for paris.jpat from *.gp
 	| grep -P "\/A\d+" > $@.tmp
 	perl paris_gen.pl    $@.tmp > $(AMAN)/$@.man
 	cd $(AMAN) ; head -n4 $@.man ; wc -l $@.man
-#----
-poeis_extract: # extract the data for table poeis
-	cd maint ; find ../prog/gp -type d \
-	| perl poeis_extract.pl -d 1 -x \
-	>        poeis.txt
-	head -n4 poeis.txt
-	wc -l    poeis.txt
-poeis_load:
-	perl maint/poeis_extract.pl -c > poeis.create.sql  
-	$(DBAT) -f poeis.create.sql
-	$(DBAT) -r poeis < poeis.txt
-	$(DBAT) -n poeis
-	$(DBAT) -4 poeis

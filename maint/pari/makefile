@@ -90,11 +90,20 @@ pari_decexp: # generate seq4 format
 	wc -l    $@.*tmp
 pari_decexp2:
 	perl ../gen_prog.pl pari_decexp.tmp
-paritest: # test all generated PARI programs in ../../sandbox/gp
+sandtest: # test all generated PARI programs in ../../sandbox/gp
 	find ../../sandbox/gp -iname "*.gp"  \
 	| perl -pe "s{[^A]+}{}; s{\.gp}{};" \
 	| tee $(FISCHER)/ghead.tmp
-	cd $(FISCHER) ; make CC=$@ test2 log
+	cd $(FISCHER) ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$@ test2 log
+progtest: # test all generated PARI programs in ../../sandbox/gp
+	$(DBAT) -x "SELECT aseqno FROM poeis \
+	  WHERE lang='pari' \
+	    AND type='decexp' \
+	  ORDER BY 1"  \
+	| tr -d "\r" \
+	| tee $(FISCHER)/ghead.tmp
+	wc -l $(FISCHER)/ghead.tmp
+	cd $(FISCHER) ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$@ test2 log
 deploy: # move the "pass"ed ones into git repository
 	cut -f1 $(FISCHER)/paritest.pass.log > pass.tmp
 	find ../../sandbox -iname "*.gp" | grep -f pass.tmp \
