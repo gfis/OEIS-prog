@@ -55,9 +55,16 @@ sub polish1 { # global $type, $code, $created, $author
     if ($debug >= 1) {
         print "lines = [\"" . join("\",\"", @lines) . "\"]\n";
     }
-    if ($code !~ m{default *\( *realprecision}) { 
-        my $prec = $bfimax + $bfimax / 5; # + 20%
-        $lines[1] = "default(realprecision,$prec);";
+    my $prec = 128;
+    my $bf_prec = $bfimax + $bfimax / 5;
+    #                                              1   1
+    if ($code =~ m{default *\( *realprecision *\, *(\d+)}) {
+        $prec = $1;
+        if ($prec < $bf_prec) {
+            $code =~ s{realprecision *\, *$prec}{realprecision,$bf_prec};
+        }
+    } else {
+        $lines[1] = "default(realprecision,$bf_prec);";
         unshift(@lines, ""); # prefix with an empty line again
     }
     my $len   = scalar(@lines);

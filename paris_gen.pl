@@ -11,7 +11,6 @@ if (0 and scalar(@ARGV) == 0) {
     print `grep -E "^#:#" $0 | cut -b3-`;
     exit;
 }
-
 my $debug    = 0; # 0 (none), 1 (some), 2 (more)
 while (scalar(@ARGV) > 0 and ($ARGV[0] =~ m{\A[\-\+]})) {
     my $opt = shift(@ARGV);

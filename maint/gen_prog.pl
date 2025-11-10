@@ -45,6 +45,10 @@ while (<>) {
         $lines[1] = $header;
         shift(@lines);
         foreach my $line (@lines) {
+            $line =~ s{\s+\Z}{};
+            if (($line !~ m{\*\/\Z}) && ($line !~ m{\\\\}) && ($line !~ m{\;\Z})) {
+                $line .= ";";
+            }
             print TAR "$line\n";
         }
         print "#----> $target $type $offset written\n";

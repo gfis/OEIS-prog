@@ -65,6 +65,7 @@ pari_isok: # generate seq4 format
 	tail -n4 $@.tmp
 	wc -l    $@.*tmp
 #----
+pari_decexp: pari_decexp0 pari_decexp1 pari_decexp2 pari_decexp3
 pari_decexp0: # extract from db table asprog
 	# aseqno, callcode="pari_decexp",  offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author, parm7=nstart
 	$(DBAT) "SELECT p.aseqno, 'pari_decexp', i.offset1, p.program, p.curno, b.bfimax\
@@ -79,22 +80,28 @@ pari_decexp0: # extract from db table asprog
 	>        $@.tmp
 	tail -n4 $@.tmp
 	wc -l    $@.tmp
-pari_decexp: # generate seq4 format
+pari_decexp1: # generate seq4 format
 	head -n$(MANY) pari_decexp0.tmp \
 	| perl pari_unharness.pl \
 	2>       $@.un.rest.tmp \
-	| perl $@.pl \
+	| perl pari_decexp.pl \
 	2>       $@.rest.tmp \
 	>        $@.tmp
 	tail -n4 $@.tmp
 	wc -l    $@.*tmp
-pari_decexp2:
-	perl ../gen_prog.pl pari_decexp.tmp
+pari_decexp2: # modify negative constants
+	cut -b1-7 pari_decexp_neg.man > grep_neg.tmp
+	perl pari_decexp_neg.pl      -n grep_neg.tmp pari_decexp1.tmp > $@.tmp
+pari_decexp3: # generate *.gp in the sandbox
+	rm -rf   ../../sandbox/gp
+	mkdir -p ../../sandbox/gp
+	perl ../gen_prog.pl pari_decexp2.tmp
 sandtest: # test all generated PARI programs in ../../sandbox/gp
 	find ../../sandbox/gp -iname "*.gp"  \
 	| perl -pe "s{[^A]+}{}; s{\.gp}{};" \
-	| tee $(FISCHER)/ghead.tmp
-	cd $(FISCHER) ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$@ test2 log
+	| tee $(FISCHER)/ghead.tmp 
+	wc -l $(FISCHER)/ghead.tmp 
+	cd $(FISCHER) ; rm $@.*.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$@ test2 log
 progtest: # test all generated PARI programs in ../../sandbox/gp
 	$(DBAT) -x "SELECT aseqno FROM poeis \
 	  WHERE lang='pari' \
@@ -103,9 +110,10 @@ progtest: # test all generated PARI programs in ../../sandbox/gp
 	| tr -d "\r" \
 	| tee $(FISCHER)/ghead.tmp
 	wc -l $(FISCHER)/ghead.tmp
-	cd $(FISCHER) ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$@ test2 log
+	cd $(FISCHER) ; rm $@.*.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$@ test2 log
 deploy: # move the "pass"ed ones into git repository
-	cut -f1 $(FISCHER)/paritest.pass.log > pass.tmp
+	cut -f1 $(FISCHER)/sandtest.pass.log > pass.tmp 
+	wc -l pass.tmp
 	find ../../sandbox -iname "*.gp" | grep -f pass.tmp \
 	| head -n$(MANY) \
 	| perl ../deploy_prog.pl
