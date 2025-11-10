@@ -24,7 +24,9 @@ DEBUG=1
 #----
 all: # show all targets
 	grep -E "^[a-z]" makefile
-#----
+#---- 
+poeis: poeis_extract poeis_load poeis_eval # rebuild the table for the metadata for implemented foreign programs
+
 poeis_extract: # extract the data for table poeis
 	find ../prog/gp -type d \
 	| perl poeis_extract.pl -d 1 -x \

@@ -62,6 +62,7 @@ sub polish1 { # global $type, $code, $created, $author
         $prec = $1;
         if ($prec < $bf_prec) {
             $code =~ s{realprecision *\, *$prec}{realprecision,$bf_prec};
+            @lines = split(/ *$sep/, $code); # first 2 lines are empty  
         }
     } else {
         $lines[1] = "default(realprecision,$bf_prec);";

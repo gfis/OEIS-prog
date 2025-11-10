@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A359493 lang=pari curno=2 type=isok rev=24 offset=1 bfimax=53 */
+isok(n) = { if(!(ispower(n) || n==1), return(0)); my(f = factor(n), d = divisors(f), m = Map(), i, j, nv, e, fd); for(i = 1, #d, e = (-1)^i * binomial(#d-1, i-1); fd = factor(d[i]); for(j = 1, #fd~, if(mapisdefined(m, fd[j, 1]), nv = mapget(m, fd[j, 1]); mapput(m, fd[j, 1], nv + e * fd[j, 2]) , mapput(m, fd[j, 1], e * fd[j, 2]) ) ) ); for(i = 1, #f~, if(mapget(m, f[i, 1]) != 0, return(0) ) ); return(1) };

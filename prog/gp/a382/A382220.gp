@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A382220 lang=pari curno=1 type=isok rev=17 offset=1 bfimax=11 */
+isok(n) = if((n==2 || n==4 || (n%4<>0 && isprimepower(n)<>0) || (n%4<>0 && n/2==floor(n/2) && isprimepower(n/2)<>0))==0, return(0), my(m=lcm(apply(f->(f[1]-1)*f[1]^(f[2]-1-(f[1]==2&&f[2]>2)), Vec(factor(n)~)))); for(k=1, n-1, if(gcd(k, n)==1 && znorder(Mod(k, n))==m && isprime(k)==0, return(0)); if(k==n-1, return(1))));
