@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A172246 lang=pari curno=1 type=an rev=31 offset=2 bfimax=106 */
+a(n) = {l = List(); m = Map(); my(res = 0); for(i = 1, n\2, if(gcd([i,(n-i),n]) == 1, c = factorback(factor(i*(n-i)*n)[,1]); listput(l, c); if(mapisdefined(m, c), mapput(m, c, mapget(m, c) + 1); , mapput(m, c, 1) ) ) ); l = Set(l); for(i = 1, #l, if(mapget(m, l[i]) > 1, res+=mapget(m, l[i]); ) ); w = vector(#l, i, mapget(m, l[i])); w = select(x -> x > 1, w); if(#w == 0, return(0)); w = vecsort(Vec(w)); return(vecsum(w) - #w + 1); };

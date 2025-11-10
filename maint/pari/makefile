@@ -44,7 +44,7 @@ pari_an1: # generate seq4 format
 	wc -l    $@.*tmp
 pari_an2: # additional processing
 	mv -v pari_an1.tmp $@.tmp
-pari_an33: # generate *.gp in the sandbox
+pari_an3: # generate *.gp in the sandbox
 	rm -rf   ../../sandbox/gp
 	mkdir -p ../../sandbox/gp
 	perl ../gen_prog.pl pari_an2.tmp
@@ -116,7 +116,7 @@ sandtest: # test all generated PARI programs in ../../sandbox/gp
 	| perl -pe "s{[^A]+}{}; s{\.gp}{};" \
 	| tee $(FISCHER)/ghead.tmp 
 	wc -l $(FISCHER)/ghead.tmp 
-	cd $(FISCHER) ; rm -f $@.*.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$@ test2 log
+	cd $(FISCHER) ; rm -f batch.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$@ test2 evaluate log
 progtest: # test all generated PARI programs in ../../prog/gp
 	$(DBAT) -x "SELECT aseqno FROM poeis \
 	  WHERE lang='pari' \
@@ -125,7 +125,7 @@ progtest: # test all generated PARI programs in ../../prog/gp
 	| tr -d "\r" \
 	| tee $(FISCHER)/ghead.tmp
 	wc -l $(FISCHER)/ghead.tmp
-	cd $(FISCHER) ; rm -f $@.*.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/prog    CC=$@ test2 log
+	cd $(FISCHER) ; rm -f batch.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/prog    CC=$@ test2 evaluate log
 deploy: # move the "pass"ed ones into git repository
 	cut -f1 $(FISCHER)/sandtest.pass.log > pass.tmp 
 	wc -l pass.tmp

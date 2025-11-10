@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A308679 lang=pari curno=1 type=an rev=9 offset=3 bfimax=26 */
+a(n) = my(k=2,C=binomial); sum(j = 0, k, C(k, j) * (-1)^j * ((k-1) * sum(m = 0, (n-j), C(n-j-1+(k-1)*m, n-j-m) * (2*C(n-j+2, m)/(n-j+2) - C(n-j+1, m)/(n-j+1))) + sum(m = 0, (n+1-j), C(n-j+(k-1)*m, n-j+1-m) * (2*C(n+1-j+2, m)/(n+1-j+2) - C(n+1-j+1, m)/(n+1-j+1))))) + (2*(2-k)/(n+1)) * sum(m = 0, (n-1), C(n+1, m) * C(n-2+(k-1)*m, n-1-m)) - (4/(n+2)) * sum(m = 0, n, C(n+2, m) * C(n-1+(k-1)*m, n-m)) + sum(m = 0, n, C(n, m) * C(n+(k-1)*m-1, n-m)/(n+1-m));

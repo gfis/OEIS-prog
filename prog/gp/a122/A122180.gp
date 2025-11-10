@@ -1,0 +1,22 @@
+/* source=https://oeis.org/A122180 lang=pari curno=3 type=an rev=15 offset=1 bfimax=10000 */
+a(n) = {;
+  my(d = divisors(n));
+  if(#d <= 5, return(0));
+  my(res = 0, q);
+  for(i = 2, #d,;
+    q = d[#d + 1 - i];
+    if(d[i]^2 > q,;
+      return(res);
+    );
+    for(j = i + 1, #d,;
+      qj = q/d[j];
+      if(qj <= d[j],;
+        next(2);
+      );
+      if(denominator(qj) == 1 && n % qj == 0,;
+        res++;
+      );
+    );
+  );
+  res;
+};
