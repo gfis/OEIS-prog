@@ -2,6 +2,7 @@
 
 # makefile in gits/OEIS-prog/maint/pari
 # @(#) $Id$
+# 2025-11-15: decexp; *EFF=4
 # 2025-11-03: reattempt
 # 2022-06-21, Georg Fischer
 #----------------
@@ -122,6 +123,12 @@ progtest: # test all generated PARI programs in ../../prog/gp
 	  WHERE lang='pari' \
 	    AND type IN ('decexp','an','isok','isok0') \
 	  ORDER BY 1"  \
+	| tr -d "\r" \
+	| tee $(FISCHER)/ghead.tmp
+	wc -l $(FISCHER)/ghead.tmp
+	cd $(FISCHER) ; rm -f batch.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/prog    CC=$@ test2 evaluate log
+regtest: # LIST= test a LIST of PARI programs in ../../prog/gp
+	cut -b1-7 $(LIST) \
 	| tr -d "\r" \
 	| tee $(FISCHER)/ghead.tmp
 	wc -l $(FISCHER)/ghead.tmp

@@ -1,6 +1,7 @@
 #!perl
 
 # Remove trailing print commands, cut off comments and extract any author; double '' -> single '
+# 2025-11-15, generalized; *EFF=4
 # 2022-06-17, Georg Fischer
 #:# Usage:
 #:#   perl pari_unharness.pl input.seq4 > output.seq4
