@@ -81,9 +81,12 @@ sub extract_attrs {
         if ($header =~ m{ timeout\=(\w+)}     ) { $timeout = $1; }
         if ($header =~ m{ status\=([\-0-9a-zA-Z]+)} ) { $status  = $1; }
         if ($header =~ m{ nstart\=([\-0-9]+)} ) { $nstart  = $1; }
-        $status = "pass"  if ! defined($status);
-        $nstart = $offset if ! defined($nstart);
+        $timeout= 0          if ! defined($timeout);
+        $status = "unknown"  if ! defined($status);
+        $nstart = $offset    if ! defined($nstart);
         print join("\t", $aseqno, $lang, $curno, $type, $rev, $offset, $bfimax, $timeout, $status, $nstart) . "\n";
+    } else {
+        print STDERR "$lines[0]\n";
     }
 } # extract_attrs
 #----
