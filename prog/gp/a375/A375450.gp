@@ -1,0 +1,3 @@
+/* source=https://oeis.org/A375450 lang=pari curno=1 type=an rev=11 offset=0 bfimax=200 */
+{a(n) = my(A=[1]); for(i=1, n, A=concat(A, 0);
+A[#A] = sum(k=0, #A-1, (-1)^(#A-k) * binomial(2*(#A-1)-k, 1*k) * polcoef(Ser(A)^(#A-1), k) )/(#A-1) ); A[n+1]};

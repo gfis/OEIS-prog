@@ -14,7 +14,18 @@ $pwd =~ m{(/gits/)};
 my $gits = $`. "/gits"; # prematch
 
 my $tardir = "$gits/OEIS-prog/sandbox"; 
-my $odir = "";
+my $odir   = "";
+my $debug  = 0; # 0 (none), 1 (some), 2 (more)
+while (scalar(@ARGV) > 0 and ($ARGV[0] =~ m{\A[\-\+]})) {
+    my $opt = shift(@ARGV);
+    if (0) {
+    } elsif ($opt  =~ m{d}) {
+        $debug     = shift(@ARGV);
+    } else {
+        die "invalid option \"$opt\"\n";
+    }
+} # while $opt
+
 while (<>) {
     s/\s+\Z//; # chompr
     next if ! m{\AA\d+};
@@ -51,7 +62,9 @@ while (<>) {
             }
             print TAR "$line\n";
         }
-        print "#----> $target $type $offset written\n";
+        if ($debug > 0) {
+            print "#----> $target $type $offset written\n";
+        }
         close(TAR);
     } # valid cc
 } # while <>

@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A152652 lang=pari curno=1 type=an rev=24 offset=1 bfimax=1713 */
+a(n) = {n = (n-1)\2*6+3+(-1)^n ; t = ceil(n/9); leastfound = oo; while(leastfound == oo, my(p = partitions(n, [1,9], [t,t])); v = vector(#p, i, oo); for(i = 1, #p, if(fromdigits(Vec(p[i])) > leastfound, next(2)); forperm(Vec(p[i]), q, if(isprime(fromdigits(Vec(q))), leastfound = min(leastfound, fromdigits(Vec(q))); v[i] = min(v[i], fromdigits(Vec(q))); next(2); ) ) ); t++ ); leastfound };

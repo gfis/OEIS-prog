@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A232125 lang=pari curno=1 type=an rev=20 offset=0 bfimax=14 */
+a(n) = {n++; v = vector(n); i = 1; ok = 0; until (ok, while ((i>1) && (v[i] == 9), v[i] = 0; i--); if (i == 1, v[i] = nextprime(v[i]+1), v[i] = v[i]+1); curp = sum (j=1, i, v[j]*(10^(i-j))); if (isprime(curp), if (i != n, i++, nbp = 0; for (z=1, 9, if (isprime(10*curp+z), nbp++);); if (nbp == 0, ok = 1);););); sum (j=1, n, v[j]*(10^(n-j)));};

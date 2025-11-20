@@ -82,8 +82,8 @@ sub polish1 { # global $type, $code, $created, $author
         $nok = "alarm";
     } elsif ($code =~ m{iferr}) {
         $nok = "priferr";
-    } elsif ($code =~ m{(A\d{6})}) {
-        $nok = "Annnnnn"; # skip if with A-number
+#   } elsif ($code =~ m{(A\d{6})}) {
+#       $nok = "Annnnnn"; # skip if with A-number
     } else {
         $lines[$len - 1] = $last;
     }

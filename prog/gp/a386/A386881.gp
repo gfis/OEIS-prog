@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A386881 lang=pari curno=1 type=an rev=27 offset=1 bfimax=76 */
+a(n) = my(f, A = []); (f(n) = my(g, S, T = []); (g(n) = my(P = []); for(x = 0, sqrtint(n), my(y2 = n - x^2); if(issquare(y2), my(y = sqrtint(y2)); if(x <= y, P = concat(P, [[x, y]])))); return(P)); S = g(n); if(#S == 0, return(0), for(k = 1, #S, T = concat(T, S[k][1] + S[k][2] - gcd(S[k][1], S[k][2]))); return(vecmin(T)))); for(k = 1, 2*n^2, if(f(k) == n, A = concat(A, f(k)))); return(#A);

@@ -19,7 +19,7 @@ A=A000000
 #----
 all: # show all targets
 	grep -E "^[a-z]" makefile
-#----  
+#----
 pari_nyi: # extract from db table asprog
 	$(DBAT) -x "SELECT p.aseqno, 'pari_nyi', i.offset1, p.program, p.curno, b.bfimax\
 	    , i.revision, SUBSTR(i.created, 0, 10), i.author, i.offset1 \
@@ -64,6 +64,45 @@ pari_an3: # generate *.gp in the sandbox
 	rm -rf   ../../sandbox/gp
 	mkdir -p ../../sandbox/gp
 	perl ../gen_prog.pl pari_an2.tmp
+	find     ../../sandbox/gp -type f | wc
+#--
+pari_Axx: pari_Axx0 pari_Axx1 pari_Axx2 pari_Axx3
+pari_Axx0: # extract from db table asprog
+	# aseqno, callcode="pari_Axx", offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author
+	$(DBAT) -x "SELECT p.aseqno, 'pari_Axx', i.offset1, p.program, p.curno, b.bfimax\
+	    , i.revision, SUBSTR(i.created, 0, 10), i.author, i.offset1 \
+	  FROM asprog p, bfinfo b, asinfo i \
+	  WHERE p.aseqno = i.aseqno \
+	    AND i.aseqno = b.aseqno \
+	    AND p.aseqno NOT IN ((SELECT aseqno FROM joeis) UNION (SELECT aseqno FROM poeis)) \
+	    AND p.lang   = 'pari' AND \
+	    (  p.program LIKE '%~~A______(n%' \
+	    OR p.program LIKE '%~~A______( n%' \
+	    OR p.program LIKE '~~~~A_______upto(%' \
+	    ) \
+	    ORDER BY 1" \
+	| perl -pe "s{\'\'}{\'}g;" \
+	>        $@.tmp
+	tail -n4 $@.tmp
+	wc -l    $@.tmp
+pari_Axx1: # generate seq4 format
+	perl pari_unharness.pl pari_Axx0.tmp \
+	2>       $@.rest.tmp \
+	>        $@.tmp
+	tail -n4 $@.tmp
+	wc -l    $@.*tmp
+pari_Axx2: # additional processing
+	perl pari_prepare.pl -m Axx pari_Axx1.tmp \
+	>        $@.tmp \
+	2>       $@.rest.tmp
+	head -n2 $@.tmp
+	wc -l    $@*.tmp
+pari_Axx3: # generate *.gp in the sandbox
+	rm -rf   ../../sandbox/gp
+	mkdir -p ../../sandbox/gp
+	perl ../gen_prog.pl pari_Axx2.tmp
+	find     ../../sandbox/gp -type f | wc
+
 #----
 pari_isok: pari_isok0 pari_isok1 pari_isok2 pari_isok3
 pari_isok0: # extract from db table asprog
@@ -93,7 +132,8 @@ pari_isok2: # additional processing
 pari_isok3: # generate *.gp in the sandbox
 	rm -rf   ../../sandbox/gp
 	mkdir -p ../../sandbox/gp
-	perl ../gen_prog.pl pari_isok2.tmp
+	perl ../gen_prog.pl pari_isok2.tmp 
+	find     ../../sandbox/gp -type f | wc
 #----
 pari_decexp: pari_decexp0 pari_decexp1 pari_decexp2 pari_decexp3
 pari_decexp0: # extract from db table asprog
@@ -126,12 +166,13 @@ pari_decexp3: # generate *.gp in the sandbox
 	rm -rf   ../../sandbox/gp
 	mkdir -p ../../sandbox/gp
 	perl ../gen_prog.pl pari_decexp2.tmp
+	find     ../../sandbox/gp -type f | wc
 #----
 sandtest: # CC= test all generated PARI programs in ../../sandbox/gp
 	find ../../sandbox/gp -iname "*.gp"  \
 	| perl -pe "s{[^A]+}{}; s{\.gp}{};" \
-	| tee $(FISCHER)/ghead.tmp 
-	wc -l $(FISCHER)/ghead.tmp 
+	| tee $(FISCHER)/ghead.tmp
+	wc -l $(FISCHER)/ghead.tmp
 	cd $(FISCHER) ; rm -f batch.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/sandbox CC=$(CC) test2 evaluate log
 progtest: # test all generated PARI programs in ../../prog/gp
 	$(DBAT) -x "SELECT aseqno FROM poeis \
@@ -148,9 +189,15 @@ regtest: # LIST= test a LIST of PARI programs in ../../prog/gp
 	| tee $(FISCHER)/ghead.tmp
 	wc -l $(FISCHER)/ghead.tmp
 	cd $(FISCHER) ; rm -f batch.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/prog    CC=$@ test2 evaluate log
-deploy: # move the "pass"ed ones into git repository
-	cut -f1 $(FISCHER)/sandtest.pass.log > pass.tmp 
-	wc -l pass.tmp
-	find ../../sandbox -iname "*.gp" | grep -f pass.tmp \
+deploy: deploy1 deploy2 # CC= move the "pass"ed ones into git repository
+deploy1:
+	cat     $(FISCHER)/$(CC).pass.log                              > $@.tmp
+	wc -l    $@.tmp
+	grep -P "\t\d\d+\tFATO\t" $(FISCHER)/$(CC).fail.log           >> $@.tmp
+	tail -n8 $@.tmp
+	wc -l    $@.tmp
+deploy2:
+	cut -f1  deploy1.tmp | tr -d "\r"        > $@.tmp
+	find ../../sandbox -iname "*.gp" | grep -f $@.tmp \
 	| head -n$(MANY) \
 	| perl ../deploy_prog.pl

@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A086846 lang=pari curno=1 type=an rev=14 offset=1 bfimax=18 */
+a(n) = my(N=10^n-1, count=0, L=#digits(sqrtint(N))); for(k=1, L-1, count += binomial(primepi(10^k) - primepi(10^(k-1)) + 1, 2)); my(min = 10^(L-1), max = 10^L-1, pi_min = primepi(min), pi_max = primepi(max), j = 0); forprime(p = min, max, if(p*p <= N, count += if(N >= p*max, pi_max, primepi(N\p)) - pi_min - j; j+=1, break)); count;

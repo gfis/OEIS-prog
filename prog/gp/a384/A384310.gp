@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A384310 lang=pari curno=1 type=isok rev=29 offset=1 bfimax=55 */
+isok(n) = (count(n) = my(f, S=[], b);(f(m)=my(r=0); forprime(p=2, m, r+=m%p); return(r)); if(n<=21, b=26); if(n>21, b=n); if(n>=250, b=n^0.8); if(n>=6000, b=n^0.7); if(n>=21000, b=n^0.68); if(n>=43000, b=n^0.67); for(k=0, b, if(f(k)==n, S=concat(S,k))); return(S)); if(n==0 || (n>1 && count(n)<>[] && count(n+1)<>[]), return(1), return(0));

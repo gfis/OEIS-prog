@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A321169 lang=pari curno=2 type=an rev=27 offset=1 bfimax=801 */
+a(n) = {my(p3 = 3^n, u, c); if(n <= 2, return(4 - n)); if(isprime(p3 - 2), return(p3 - 2)); forprime(p = 5, oo, if(isprime(p3 / 3 * p - 2), u = p3 / 3 * p - 2; break ) ); for(i = 2, n, if(p3 * (5/3)^i > u, return(u)); for(j = 1, oo, if(p3 * j \ 3^i > u, next(2)); if(bigomega(j) == i, if(isprime(p3 / 3^(i) * j - 2), u = p3 / 3^(i) * j - 2; next(2) ) ) ) ); return(u) };
