@@ -1,0 +1,6 @@
+/* source=https://oeis.org/A334087 lang=pari curno=1 type=an rev=28 offset=0 bfimax=50 */
+;
+f(i,j,c,d)=my(L=List(),x,y);x=(d-c)/(j-i);if(max(c/i,d/j)<=x&&x<min((c+1)/i,(d+1)/j),y=(d*i-c*j)/(j-i);listinsert(L,[x,y],1));L;
+g(i,j)=my(c,d,L,S=Set());for(c=0,i-1,for(d=c+1,j-1,L=f(i,j,c,d);S=setunion(S,Set(L))));S;
+h(n)=my(i,j,S=Set());for(i=1,n-1,for(j=i+1,n,S=setunion(S,g(i,j))));S;
+a(n)=(n>1)+#h(n);

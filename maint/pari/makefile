@@ -34,6 +34,14 @@ pari_nyi: # extract from db table asprog
 	tail -n4 $@.tmp
 	wc -l    $@.tmp
 
+pari_print1: # grep the ones that work with an if print1 is removed
+	grep -P "for\(n\=\d, *\d+\, *print1\(a\(n\)" pari_nyi.tmp \
+	| perl -pe 's{pari_nyi}{pari_an}; s{for\(n=\, *\d+,print1\(a\(n\)[^\t]+}{};' \
+	>        pari_an0.tmp
+	tail -n4 pari_an0.tmp
+	wc -l    pari_an0.tmp
+	make pari_an1 pari_an2 pari_an3
+
 pari_an: pari_an0 pari_an1 pari_an2 pari_an3
 pari_an0: # extract from db table asprog
 	# aseqno, callcode="pari_an", offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author
@@ -200,4 +208,5 @@ deploy2:
 	cut -f1  deploy1.tmp | tr -d "\r"        > $@.tmp
 	find ../../sandbox -iname "*.gp" | grep -f $@.tmp \
 	| head -n$(MANY) \
-	| perl ../deploy_prog.pl
+	| perl ../deploy_prog.pl 
+	git commit -a -m"sandtest.$(CC)"

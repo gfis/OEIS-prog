@@ -59,7 +59,7 @@ poeis_nyi: # determine the ones that are new, i.e. not yet implemented in jOEIS
 num: prognum sandnum # count the programs in both containers
 prognum: # count the programs in OEIS-prog/prog
 	find ../prog    -type f | wc
-progcheck: # list the ones in ./prog that are NOT in db table poeis
+progcheck: # list the PARIs in ./prog that are NOT in db table poeis
 	find ../prog    -type f \
 	| perl -ne 'm{(A\d+)\.gp\Z}; print "$$1\n";' \
 	>        $@.1.tmp
@@ -72,7 +72,7 @@ progcheck: # list the ones in ./prog that are NOT in db table poeis
 	| tr -d "\r" \
 	| tee    $@.tmp 
 	wc -l    $@.tmp
-progbak: # list the ones in ./prog that are NOT in db table poeis
+progbak: # list the ones in ./prog/*/*.gp.bak that are NOT in db table poeis
 	find ../prog    -type f -iname "*.gp.bak" \
 	| perl -ne 'm{(A\d+)}; print "$$1\n";' \
 	>        $@.1.tmp
