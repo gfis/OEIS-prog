@@ -74,6 +74,26 @@ pari_an3: # generate *.gp in the sandbox
 	perl ../gen_prog.pl pari_an2.tmp
 	find     ../../sandbox/gp -type f | wc
 #--
+pari_axx: 
+	rm -f pari_axx* pari_Axx*
+	grep -P "\~\~a\d+\(n" pari_nyi.tmp \
+	| perl pari_prepare.pl -m axx \
+	2>      pari_axx0.rest.tmp \
+	>       pari_axx0.tmp 
+	wc -l   pari_axx0.tmp pari_axx0.rest.tmp
+	make pari_axx1 pari_axx3
+pari_axx1: # generate seq4 format
+	perl pari_unharness.pl pari_axx0.tmp \
+	2>       $@.rest.tmp \
+	>        $@.tmp
+	tail -n2 $@.tmp
+	wc -l    $@*.tmp
+pari_axx3: # generate *.gp in the sandbox
+	rm -rf   ../../sandbox/gp
+	mkdir -p ../../sandbox/gp
+	perl ../gen_prog.pl pari_axx1.tmp
+	find     ../../sandbox/gp -type f | wc
+#----
 pari_Axx: pari_Axx0 pari_Axx1 pari_Axx2 pari_Axx3
 pari_Axx0: # extract from db table asprog
 	# aseqno, callcode="pari_Axx", offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author

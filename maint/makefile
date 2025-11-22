@@ -105,4 +105,5 @@ sandprune: # remove the ones from ./sandbox that are already in poeis
 	find ../sandbox -type f \
 	| grep -f sandcheck.tmp \
 	| xargs -innn echo rm -v nnn
-	
+gpkill:
+	tasklist | grep gp | perl -ne 'm{(\d+)}; print "$$1\n";' | xargs -innn taskkill /F /PID nnn	
