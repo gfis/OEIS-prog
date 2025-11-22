@@ -29,10 +29,11 @@ pari_nyi: # extract from db table asprog
 	    AND p.aseqno NOT IN ((SELECT aseqno FROM joeis) UNION (SELECT aseqno FROM poeis)) \
 	    AND p.lang   = 'pari' \
 	    ORDER BY 4,1" \
-	| perl -pe "s{\'\'}{\'}g;" \
+	| perl pari_unharness.pl \
+	2>       $@.rest.tmp \
 	>        $@.tmp
-	tail -n4 $@.tmp
-	wc -l    $@.tmp
+	tail -n2 $@.tmp
+	wc -l    $@.*tmp
 
 pari_print1: # grep the ones that work with an if print1 is removed
 	grep -P "for\(n\=\d, *\d+\, *print1\(a\(n\)" pari_nyi.tmp \
@@ -74,13 +75,29 @@ pari_an3: # generate *.gp in the sandbox
 	perl ../gen_prog.pl pari_an2.tmp
 	find     ../../sandbox/gp -type f | wc
 #--
+pari_isAxx:
+	grep -P "\~\~is[Aa]\d{6}\([kn][\,\)]" pari_nyi.tmp \
+	>       pari0.tmp
+	make MODE=isAxx pari1 pari2
+pari1:
+	perl pari_prepare.pl -m $(MODE) pari0.tmp \
+	2>       $@.rest.tmp \
+	>        $@.tmp  
+	tail -n2 $@.tmp
+	wc -l    $@*.tmp
+pari2: # generate *.gp in the sandbox
+	rm -rf   ../../sandbox/gp
+	mkdir -p ../../sandbox/gp
+	perl ../gen_prog.pl pari1.tmp
+	find     ../../sandbox/gp -type f | wc
+#--
 pari_axx: 
 	rm -f pari_axx* pari_Axx*
 	grep -P "\~\~a\d+\(n" pari_nyi.tmp \
 	| perl pari_prepare.pl -m axx \
-	2>      pari_axx0.rest.tmp \
-	>       pari_axx0.tmp 
-	wc -l   pari_axx0.tmp pari_axx0.rest.tmp
+	2>       pari_axx0.rest.tmp \
+	>        pari_axx0.tmp 
+	wc -l    pari_axx0.tmp pari_axx0.rest.tmp
 	make pari_axx1 pari_axx3
 pari_axx1: # generate seq4 format
 	perl pari_unharness.pl pari_axx0.tmp \

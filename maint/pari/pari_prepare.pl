@@ -63,7 +63,7 @@ sub polish1 { # global $type, $code, $created, $author
     }
     if(0) {
     #--------
-    } elsif ($mode =~ m{Axx}) { # starting with or containing "Axxxxxx(n) = ..."?
+    } elsif ($mode eq "Axx") { # starting with or containing "Axxxxxx(n) = ..."?
         if ($code =~ m{($aseqno) *\( *n[^\)]*\) *\=}) { 
             my $rseqno = $1;
             $code =~ s{\s+\Z}{}; # trim
@@ -76,8 +76,22 @@ sub polish1 { # global $type, $code, $created, $author
         } else {
             $nok = "no_Axx";
         }
+    } elsif ($mode eq "isAxx") { # starting with or containing "isAxxxxxx(n"
+        my $seqno = substr($aseqno, 1);
+        if ($code =~ m{(is[Aa]$seqno) *\( *[kn]}) { 
+            my $rseqno = $1;
+            $code =~ s{\s+\Z}{}; # trim
+            if ($code !~ m{\;\Z}) {
+                $code .= ";";
+            }
+            $code .= "${sep}isok(n)=$rseqno(n);"; # "$sep" is important
+            $type  = "pari_isok";
+            $nstart = $offset;
+        } else {
+            $nok = "no_Axx";
+        }
     #--------
-    } elsif ($mode =~ m{axx}) { # starting with or containing "axxxxxx(n) = ..."? 
+    } elsif ($mode eq "axx") { # starting with or containing "axxxxxx(n) = ..."? 
         my $rseqno = lc($aseqno);
         if ($code =~ m{($rseqno) *\( *n[^\)]*\) *\=}) { 
             $code =~ s{\s+\Z}{}; # trim
@@ -91,7 +105,7 @@ sub polish1 { # global $type, $code, $created, $author
             $nok = "no_axx";
         }
     #--------
-    } elsif ($mode =~ m{decexp}) { # keyword "cons"
+    } elsif ($mode eq "decexp") { # keyword "cons"
         my $prec = 128;
         my $bf_prec = $bfimax + $bfimax / 5;
         #                                              1   1
