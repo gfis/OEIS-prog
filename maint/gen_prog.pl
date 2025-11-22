@@ -31,11 +31,14 @@ while (<>) {
     next if ! m{\AA\d+};
     my ($aseqno, $callcode, $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart);
     (   $aseqno, $callcode, $offset, $code, $curno, $bfimax, $rev, $created, $author, $nstart) = split(/\t/);
-    if (defined($callcode) && ($callcode =~ s{_}{\,}g) == 1) { # valid cc
+    if (defined($callcode) && ($callcode =~ s{_}{\,}g) == 1) { # valid cc  
+        if (! defined($nstart)) {
+            $nstart = $offset;
+        }
         my ($lang, $type) = split(/\,/, $callcode);
         my $ext = "unknown_lang";
-        my $header = "source=https://oeis.org/$aseqno lang=$lang curno=$curno type=$type rev=$rev offset=$offset bfimax=$bfimax";
-          #        \\ source=https://oeis.org/A382553 lang=pari curno=1 type=decexp  rev=8 offset=0 bfimax=98
+        my $header = "source=https://oeis.org/$aseqno lang=$lang curno=$curno type=$type rev=$rev offset=$offset bfimax=$bfimax nstart=$nstart";
+          #        \\ source=https://oeis.org/A382553 lang=pari curno=1 type=decexp  rev=8 offset=0 bfimax=98 nstart=0
         my $sub = $lang;
         if (0) {
         } elsif ($lang eq "pari") {

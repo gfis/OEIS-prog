@@ -1,0 +1,3 @@
+/* source=https://oeis.org/A371070 lang=pari curno=1 type=an rev=22 offset=6 bfimax=200 */
+a371070(n) = {my (L=List()); forpart (w=n, forperm (w,v, if(v[4]+v[5]<v[6],next); if(v[4]+v[6]<v[5],next); if(v[5]+v[6]<v[4],next); if(v[1]+v[2]<v[4],next); if(v[1]+v[4]<v[2],next); if(v[2]+v[4]<v[1],next); if(v[1]+v[3]<v[5],next); if(v[1]+v[5]<v[3],next); if(v[3]+v[5]<v[1],next); if(v[2]+v[3]<v[6],next); if(v[2]+v[6]<v[3],next); if(v[3]+v[6]<v[2],next); my(CM=matdet ([0,1,1,1,1; 1,0,v[1]^2,v[2]^2,v[3]^2; 1,v[1]^2,0,v[4]^2,v[5]^2; 1,v[2]^2,v[4]^2,0,v[6]^2; 1,v[3]^2,v[5]^2,v[6]^2,0])); if (CM>0, listput (L,CM))), [1,n], [6,6]); #Set(Vec(L))};
+a(n)=a371070(n);

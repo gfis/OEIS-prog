@@ -78,7 +78,7 @@ sub polish1 { # global $type, $code, $created, $author
         }
     } elsif ($mode eq "isAxx") { # starting with or containing "isAxxxxxx(n"
         my $seqno = substr($aseqno, 1);
-        if ($code =~ m{(is[Aa]$seqno) *\( *[kn]}) { 
+        if ($code =~ m{(is[Aa]$seqno) *\( *\w+}) { 
             my $rseqno = $1;
             $code =~ s{\s+\Z}{}; # trim
             if ($code !~ m{\;\Z}) {

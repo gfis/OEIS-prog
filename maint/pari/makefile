@@ -76,7 +76,7 @@ pari_an3: # generate *.gp in the sandbox
 	find     ../../sandbox/gp -type f | wc
 #--
 pari_isAxx:
-	grep -P "\~\~is[Aa]\d{6}\([kn][\,\)]" pari_nyi.tmp \
+	grep -P "\~\~is[Aa]\d{6}\(\w+[\,\)]" pari_nyi.tmp \
 	>       pari0.tmp
 	make MODE=isAxx pari1 pari2
 pari1:
