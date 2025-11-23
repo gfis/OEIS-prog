@@ -60,6 +60,7 @@ sub polish1 { # global $type, $code, $created, $author
     my @lines = split(/ *$sep/, $code); # first 2 lines are empty
     my $seqno = substr($aseqno, 1);
     $code =~ s{\s+\Z}{}; # trim
+    $code =~ s{\;\Z}{};  # remove trailing ";"
     $nstart = $offset;
     if ($debug >= 1) {
         print "lines = [\"" . join("\",\"", @lines) . "\"]\n";
@@ -68,18 +69,24 @@ sub polish1 { # global $type, $code, $created, $author
     #--------
     } elsif ($mode eq "axx") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
         if ($code =~ m{\W([Aa]$seqno) *\( *\w[^\)]*\) *\=}) { 
-            $code .= "${sep}a(n)=$1(n);"; # "$sep" is important
-            $type  = "pari_an";
+            $code  .= "${sep}a(n)=$1(n);"; # "$sep" is important
+            $type   = "pari_an";
         } else {
-            $nok = "no_$mode";
+            $nok    = "no_$mode";
         }
     } elsif ($mode eq "isaxx") { # starting with or containing "is[Aa]xxxxxx(n"
         if ($code =~ m{(is[Aa]$seqno) *\( *\w+}) { 
-            $code .= "${sep}isok(n)=$1(n);"; # "$sep" is important
-            $type  = "pari_isok";
-            $nstart = $offset;
+            $code  .= "${sep}isok(n)=$1(n);";
+            $type   = "pari_isok";
         } else {
-            $nok = "no_$mode";
+            $nok    = "no_$mode";
+        }
+    } elsif ($mode eq "isok")  { # starting with or containing "isOk(n"
+        if ($code =~ m{(is[A-Za-z]*|\d) *\( *\w+}i) { 
+            $code  .= "${sep}isok(n)=$1(n);";
+            $type   = "pari_isok";
+        } else {
+            $nok    = "no_$mode";
         }
     #--------
     } elsif ($mode eq "decexp") { # keyword "cons"

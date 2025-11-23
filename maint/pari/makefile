@@ -89,13 +89,13 @@ pari2: # generate *.gp in the sandbox
 #----
 pari_axx:
 	grep -P "\~\~is[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp
-	make MODE=axx pari1 pari2
+	make MODE=axx    pari1 pari2
 pari_isaxx:
 	grep -P "\~\~is[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp
-	make MODE=isaxx pari1 pari2
+	make MODE=isaxx  pari1 pari2
 pari_isok:
 	grep -P "\~\~is([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp
-	make MODE=isok pari1 pari2
+	make MODE=isok   pari1 pari2
 #----
 pari_axx_old: 
 	rm -f pari_axx* pari_Axx*
