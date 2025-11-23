@@ -1,2 +1,0 @@
-/* source=https://oeis.org/A274552 lang=pari curno=1 type=isok rev=30 offset=1 bfimax=12 */
-isok(n) = is(n) = if(n == 3, return(0), Mod(sigma(n), n-3)==0);

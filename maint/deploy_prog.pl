@@ -20,7 +20,7 @@ my $odir = "";
 while (<>) {
     s/\s+\Z//; # chompr
     my $source = $_;
-    #      1   1  2       2  3         3  4   4
+    #                 1   1  2       2  3         3  4     4
     if($source =~ m{\/(\w+)\/(a\d\d\d)\/(A\d{6}\d*)\.(\w+)}) {
         my ($lang, $ndir,    $aseqno,     $ext) = ($1, $2, $3, $4); 
         if ($ndir ne $odir) {
