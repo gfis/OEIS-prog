@@ -68,7 +68,7 @@ sub polish1 { # global $type, $code, $created, $author
     if(0) {
     #--------
     } elsif ($mode eq "an") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
-        if ($code =~ m{\~\~a\([kn][^\)]*\) *\=}) { 
+        if ($code =~ m{\~\~a\([A-Za-z]+[^\)]*\) *\=}) { 
             $code  .= "${sep}a(n)"; # "$sep" is important
             $type   = "pari_an";
         } else {
@@ -82,14 +82,14 @@ sub polish1 { # global $type, $code, $created, $author
             $nok    = "no_$mode";
         }
     } elsif ($mode eq "isaxx") { # starting with or containing "is[Aa]xxxxxx(n"
-        if ($code =~ m{(is[Aa]$seqno) *\( *\w+}) { 
+        if ($code =~ m{(is_?[Aa]$seqno) *\( *\w+}) { 
             $code  .= "${sep}isok(n)=$1(n);";
             $type   = "pari_isok";
         } else {
             $nok    = "no_$mode";
         }
     } elsif ($mode eq "isok")  { # starting with or containing "isOk(n"
-        if ($code =~ m{(is[A-Za-z]*|\d) *\( *\w+}i) { 
+        if ($code =~ m{(is_?[A-Za-z]*|\d) *\( *\w+}i) { 
             $code  .= "${sep}isok(n)=$1(n);";
             $type   = "pari_isok";
         } else {
