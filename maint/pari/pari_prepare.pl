@@ -58,51 +58,28 @@ while (<>) { # read seq4 format
 sub polish1 { # global $type, $code, $created, $author
     my $sep   = substr($code, 0, 2); # normally "~~"
     my @lines = split(/ *$sep/, $code); # first 2 lines are empty
+    my $seqno = substr($aseqno, 1);
+    $code =~ s{\s+\Z}{}; # trim
+    $nstart = $offset;
     if ($debug >= 1) {
         print "lines = [\"" . join("\",\"", @lines) . "\"]\n";
     }
     if(0) {
     #--------
-    } elsif ($mode eq "Axx") { # starting with or containing "Axxxxxx(n) = ..."?
-        if ($code =~ m{($aseqno) *\( *n[^\)]*\) *\=}) { 
-            my $rseqno = $1;
-            $code =~ s{\s+\Z}{}; # trim
-            if ($code !~ m{\;\Z}) {
-                $code .= ";";
-            }
-            $code .= "${sep}a(n)=$rseqno(n);"; # "$sep" is important
+    } elsif ($mode eq "axx") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
+        if ($code =~ m{\W([Aa]$seqno) *\( *\w[^\)]*\) *\=}) { 
+            $code .= "${sep}a(n)=$1(n);"; # "$sep" is important
             $type  = "pari_an";
-            $nstart = $offset;
         } else {
-            $nok = "no_Axx";
+            $nok = "no_$mode";
         }
-    } elsif ($mode eq "isAxx") { # starting with or containing "isAxxxxxx(n"
-        my $seqno = substr($aseqno, 1);
+    } elsif ($mode eq "isaxx") { # starting with or containing "is[Aa]xxxxxx(n"
         if ($code =~ m{(is[Aa]$seqno) *\( *\w+}) { 
-            my $rseqno = $1;
-            $code =~ s{\s+\Z}{}; # trim
-            if ($code !~ m{\;\Z}) {
-                $code .= ";";
-            }
-            $code .= "${sep}isok(n)=$rseqno(n);"; # "$sep" is important
+            $code .= "${sep}isok(n)=$1(n);"; # "$sep" is important
             $type  = "pari_isok";
             $nstart = $offset;
         } else {
-            $nok = "no_Axx";
-        }
-    #--------
-    } elsif ($mode eq "axx") { # starting with or containing "axxxxxx(n) = ..."? 
-        my $rseqno = lc($aseqno);
-        if ($code =~ m{($rseqno) *\( *n[^\)]*\) *\=}) { 
-            $code =~ s{\s+\Z}{}; # trim
-            if ($code !~ m{\;\Z}) {
-                $code .= ";";
-            }
-            $code .= "${sep}a(n)=$rseqno(n);"; # "$sep" is important
-            $type  = "pari_an";
-            $nstart = $offset;
-        } else {
-            $nok = "no_axx";
+            $nok = "no_$mode";
         }
     #--------
     } elsif ($mode eq "decexp") { # keyword "cons"

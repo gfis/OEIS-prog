@@ -74,11 +74,7 @@ pari_an3: # generate *.gp in the sandbox
 	mkdir -p ../../sandbox/gp
 	perl ../gen_prog.pl pari_an2.tmp
 	find     ../../sandbox/gp -type f | wc
-#--
-pari_isAxx:
-	grep -P "\~\~is[Aa]\d{6}\(\w+[\,\)]" pari_nyi.tmp \
-	>       pari0.tmp
-	make MODE=isAxx pari1 pari2
+#--------
 pari1:
 	perl pari_prepare.pl -m $(MODE) pari0.tmp \
 	2>       $@.rest.tmp \
@@ -90,7 +86,17 @@ pari2: # generate *.gp in the sandbox
 	mkdir -p ../../sandbox/gp
 	perl ../gen_prog.pl pari1.tmp
 	find     ../../sandbox/gp -type f | wc
-#--
+#----
+pari_axx:
+	grep -P "\~\~is[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp
+	make MODE=Axx pari1 pari2
+pari_isaxx:
+	grep -P "\~\~is[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp
+	make MODE=isAxx pari1 pari2
+pari_isok:
+	grep -P "\~\~is([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp
+	make MODE=isok pari1 pari2
+#----
 pari_axx: 
 	rm -f pari_axx* pari_Axx*
 	grep -P "\~\~a\d+\(n" pari_nyi.tmp \
@@ -111,7 +117,7 @@ pari_axx3: # generate *.gp in the sandbox
 	perl ../gen_prog.pl pari_axx1.tmp
 	find     ../../sandbox/gp -type f | wc
 #----
-pari_Axx: pari_Axx0 pari_Axx1 pari_Axx2 pari_Axx3
+pari_Axx_old: pari_Axx0 pari_Axx1 pari_Axx2 pari_Axx3
 pari_Axx0: # extract from db table asprog
 	# aseqno, callcode="pari_Axx", offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author
 	$(DBAT) -x "SELECT p.aseqno, 'pari_Axx', i.offset1, p.program, p.curno, b.bfimax\
@@ -149,7 +155,7 @@ pari_Axx3: # generate *.gp in the sandbox
 	find     ../../sandbox/gp -type f | wc
 
 #----
-pari_isok: pari_isok0 pari_isok1 pari_isok2 pari_isok3
+pari_isok_old: pari_isok0 pari_isok1 pari_isok2 pari_isok3
 pari_isok0: # extract from db table asprog
 	# aseqno, callcode="pari_isok",  offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author, parm7=nstart
 	$(DBAT) -x "SELECT p.aseqno, 'pari_isok', i.offset1, p.program, p.curno, b.bfimax\
