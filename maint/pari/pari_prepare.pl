@@ -67,6 +67,13 @@ sub polish1 { # global $type, $code, $created, $author
     }
     if(0) {
     #--------
+    } elsif ($mode eq "an") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
+        if ($code =~ m{\~\~a\([kn][^\)]*\) *\=}) { 
+            $code  .= "${sep}a(n)"; # "$sep" is important
+            $type   = "pari_an";
+        } else {
+            $nok    = "no_$mode";
+        }
     } elsif ($mode eq "axx") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
         if ($code =~ m{\W([Aa]$seqno) *\( *\w[^\)]*\) *\=}) { 
             $code  .= "${sep}a(n)=$1(n);"; # "$sep" is important
