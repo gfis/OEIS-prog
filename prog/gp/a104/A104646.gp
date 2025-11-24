@@ -1,0 +1,24 @@
+/* source=https://oeis.org/A104646 lang=pari curno=1 type=an rev=14 offset=2 bfimax=10000 nstart=2 */
+issemi(n)=bigomega(n)==2;
+a(n)={;
+my(v=primes(n+3),s=sum(i=1,n+1,v[i]),m,t,t1);
+m=s+v[n+2]-5;
+forstep(i=n+1,1,-1,;
+t=s-v[i];
+if(t >= m, break);
+if(issemi(t),return(t));
+);
+s+=v[n+2];
+m=s+v[n+3]-10;
+for(i=2,n+2,;
+t=s-v[i];
+for(j=1,i-1,;
+t1=t-v[j];
+if(t1 >= m, break);
+if(issemi(t1),m=t1);
+);
+);
+if(issemi(m), return(m));
+error("could not find a("n")");
+};
+a(n);

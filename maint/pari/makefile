@@ -34,7 +34,32 @@ pari_nyi: # extract from db table asprog
 	>        $@.tmp
 	tail -n2 $@.tmp
 	wc -l    $@.*tmp
-
+#--------
+pari1:
+	perl pari_prepare.pl -m $(MODE) pari0.tmp \
+	2>       $@.rest.tmp \
+	>        $@.tmp  
+	tail -n2 $@.tmp
+	wc -l    $@*.tmp
+pari2: # generate *.gp in the sandbox
+	rm -rf   ../../sandbox/gp
+	mkdir -p ../../sandbox/gp
+	perl ../gen_prog.pl pari1.tmp
+	find     ../../sandbox/gp -type f | wc
+#----
+pari_an:
+	grep -P "\~\~ *a\([A-Za-z]+[^\)]*\) *\="                 pari_nyi.tmp > pari0.tmp
+	make MODE=an     pari1 pari2
+pari_axx:
+	grep -P "\~\~[Aa]\d{6}\(\w+[\,\)]"                     pari_nyi.tmp > pari0.tmp
+	make MODE=axx    pari1 pari2
+pari_isaxx:
+	grep -P "\~\~is_?[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp
+	make MODE=isaxx  pari1 pari2
+pari_isok:
+	grep -P "\~\~is_?([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp
+	make MODE=isok   pari1 pari2
+#----
 pari_print1: # grep the ones that work with an if print1 is removed
 	grep -P "for\(n\=\d, *\d+\, *print1\(a\(n\)" pari_nyi.tmp \
 	| perl -pe 's{pari_nyi}{pari_an}; s{for\(n=\, *\d+,print1\(a\(n\)[^\t]+}{};' \
@@ -43,7 +68,7 @@ pari_print1: # grep the ones that work with an if print1 is removed
 	wc -l    pari_an0.tmp
 	make pari_an1 pari_an2 pari_an3
 
-pari_an: pari_an0 pari_an1 pari_an2 pari_an3
+pari_an_old: pari_an0 pari_an1 pari_an2 pari_an3
 pari_an0: # extract from db table asprog
 	# aseqno, callcode="pari_an", offset=bfimin, parm1=program, parm2=curno, parm3=bfimax, parm4=revision, parm5=created, parm6=author
 	$(DBAT) -x "SELECT p.aseqno, 'pari_an', i.offset1, p.program, p.curno, b.bfimax\
@@ -74,32 +99,7 @@ pari_an3: # generate *.gp in the sandbox
 	mkdir -p ../../sandbox/gp
 	perl ../gen_prog.pl pari_an2.tmp
 	find     ../../sandbox/gp -type f | wc
-#--------
-pari1:
-	perl pari_prepare.pl -m $(MODE) pari0.tmp \
-	2>       $@.rest.tmp \
-	>        $@.tmp  
-	tail -n2 $@.tmp
-	wc -l    $@*.tmp
-pari2: # generate *.gp in the sandbox
-	rm -rf   ../../sandbox/gp
-	mkdir -p ../../sandbox/gp
-	perl ../gen_prog.pl pari1.tmp
-	find     ../../sandbox/gp -type f | wc
-#----
-pari_an:
-	grep -P "\~\~a\([A-Za-z]+[^\)]*\) *\="                 pari_nyi.tmp > pari0.tmp
-	make MODE=an     pari1 pari2
-pari_axx:
-	grep -P "\~\~[Aa]\d{6}\(\w+[\,\)]"                     pari_nyi.tmp > pari0.tmp
-	make MODE=axx    pari1 pari2
-pari_isaxx:
-	grep -P "\~\~is_?[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp
-	make MODE=isaxx  pari1 pari2
-pari_isok:
-	grep -P "\~\~is_?([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp
-	make MODE=isok   pari1 pari2
-#----
+#--
 pari_axx_old: 
 	rm -f pari_axx* pari_Axx*
 	grep -P "\~\~a\d+\(n" pari_nyi.tmp \
