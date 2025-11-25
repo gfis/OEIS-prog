@@ -1,0 +1,20 @@
+/* source=https://oeis.org/A263829 lang=pari curno=1 type=an rev=17 offset=1 bfimax=20000 nstart=1 */
+;
+A001001(n) = sumdiv(n, d, sigma(d) * d);
+A007429(n) = sumdiv(n, d, sigma(d));
+A007434(n) = sumdiv(n, d, moebius(n\d) * d^2);
+A059376(n) = sumdiv(n, d, moebius(n\d) * d^3);
+A060640(n) = sumdiv(n, d, sigma(n\d) * d);
+EpiPcZn(n) = sumdiv(n, d, moebius(n\d) * d^2 * gcd(d,2));
+S1(n)      = if (n%2, 0, A001001(n\2));
+S11(n)     = A060640(n) - if(n%2, 0, A060640(n\2));
+S21(n)     = if (n%2, 0, 2*A060640(n\2)) - if (n%4, 0, 2*A060640(n\4));
+S22(n)     = { if (n%2, A060640(n), if (n%4, 0,;
+sumdiv(n\4, d, 2*d*(sigma(n\(2*d)) - sigma(n\(4*d))))));
+};
+A027844(n) = S1(n) + S11(n) + S21(n);
+a(n) = { 1/n * sumdiv(n, d,;
+A059376(d) * S1(n\d) + EpiPcZn(d) * S21(n\d) + A007434(d) * S22(n\d));
+};
+vector(56, n, a(n));
+a(n);
