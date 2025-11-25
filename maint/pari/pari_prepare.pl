@@ -98,7 +98,8 @@ sub polish1 { # global $type, $code, $created, $author
             $nok    = "no_$mode";
         }
     } elsif ($mode eq "isok")  { # starting with or containing "isOk(n"
-        if ($code =~ m{(is_?[A-Za-z]*|\d) *\( *\w+}i) { 
+        #              1    2            21   
+        if ($code =~ m{(is_?([A-Za-z]*|\d)) *\( *\w+}i) { 
             $code  .= "${sep}isok(n)=$1(n);";
             $type   = "pari_isok";
         } else {
