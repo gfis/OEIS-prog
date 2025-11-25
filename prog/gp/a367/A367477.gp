@@ -1,0 +1,21 @@
+/* source=https://oeis.org/A367477 lang=pari curno=1 type=an rev=17 offset=1 bfimax=67 nstart=1 */
+;
+a(n) = {if(n == 1, return(1));
+  my(rems = vector(n^2), v = [1,1]);
+  rems[1] = 1;
+  for(i = 2, n^2,;
+    rems[i] = v[2];
+    v = [v[2], v[1]+v[2]]%n;
+    if(v == [1,1],;
+      break;
+    );
+  );
+  s = Set(rems);
+  for(i = 1, #rems,;
+    s = setminus(s, Set(rems[i]));
+    if(#s == 0,;
+      return(i);
+    );
+  );
+};
+a(n);
