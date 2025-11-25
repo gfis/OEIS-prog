@@ -38,7 +38,7 @@ pari_nyi: # extract from db table asprog
 pari1:
 	perl pari_prepare.pl -m $(MODE) pari0.tmp \
 	2>       $@.rest.tmp \
-	>        $@.tmp  
+	>        $@.tmp
 	tail -n2 $@.tmp
 	wc -l    $@*.tmp
 pari2: # generate *.gp in the sandbox
@@ -48,17 +48,15 @@ pari2: # generate *.gp in the sandbox
 	find     ../../sandbox/gp -type f | wc
 #----
 pari_an:
-	grep -P "\~\~ *a\([A-Za-z]+[^\)]*\) *\="                 pari_nyi.tmp > pari0.tmp
-	make MODE=an     pari1 pari2
+	grep -P "\~\~ *a\([A-Za-z]+[^\)]*\) *\="               pari_nyi.tmp > pari0.tmp ; make MODE=an        pari1 pari2
 pari_axx:
-	grep -P "\~\~[Aa]\d{6}\(\w+[\,\)]"                     pari_nyi.tmp > pari0.tmp
-	make MODE=axx    pari1 pari2
+	grep -P "\~\~[Aa]\d{6}\(\w+[\,\)]"                     pari_nyi.tmp > pari0.tmp ; make MODE=axx       pari1 pari2
 pari_isaxx:
-	grep -P "\~\~is_?[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp
-	make MODE=isaxx  pari1 pari2
+	grep -P "\~\~is_?[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp ; make MODE=isaxx     pari1 pari2
 pari_isok:
-	grep -P "\~\~is_?([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp
-	make MODE=isok   pari1 pari2
+	grep -P "\~\~is_?([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp ; make MODE=isok      pari1 pari2
+pari_contfrac:
+	grep -P "\~\~contfrac\("                               pari_nyi.tmp > pari0.tmp ; make MODE=contfrac  pari1 pari2
 #----
 pari_print1: # grep the ones that work with an if print1 is removed
 	grep -P "for\(n\=\d, *\d+\, *print1\(a\(n\)" pari_nyi.tmp \
@@ -100,12 +98,12 @@ pari_an3: # generate *.gp in the sandbox
 	perl ../gen_prog.pl pari_an2.tmp
 	find     ../../sandbox/gp -type f | wc
 #--
-pari_axx_old: 
+pari_axx_old:
 	rm -f pari_axx* pari_Axx*
 	grep -P "\~\~a\d+\(n" pari_nyi.tmp \
 	| perl pari_prepare.pl -m axx \
 	2>       pari_axx0.rest.tmp \
-	>        pari_axx0.tmp 
+	>        pari_axx0.tmp
 	wc -l    pari_axx0.tmp pari_axx0.rest.tmp
 	make pari_axx1 pari_axx3
 pari_axx1: # generate seq4 format
@@ -186,7 +184,7 @@ pari_isok2: # additional processing
 pari_isok3: # generate *.gp in the sandbox
 	rm -rf   ../../sandbox/gp
 	mkdir -p ../../sandbox/gp
-	perl ../gen_prog.pl pari_isok2.tmp 
+	perl ../gen_prog.pl pari_isok2.tmp
 	find     ../../sandbox/gp -type f | wc
 #----
 pari_decexp: pari_decexp0 pari_decexp1 pari_decexp2 pari_decexp3
@@ -254,5 +252,5 @@ deploy2:
 	cut -f1  deploy1.tmp | tr -d "\r"        > $@.tmp
 	find ../../sandbox -iname "*.gp" | grep -f $@.tmp \
 	| head -n$(MANY) \
-	| perl ../deploy_prog.pl 
+	| perl ../deploy_prog.pl
 	git commit -a -m"sandtest.$(CC)"

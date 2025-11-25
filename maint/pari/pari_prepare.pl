@@ -62,6 +62,7 @@ sub polish1 { # global $type, $code, $created, $author
     $code =~ s{\s+\Z}{}; # trim
     $code =~ s{\;\Z}{};  # remove trailing ";"
     $nstart = $offset;
+    my $bf_prec = $bfimax + $bfimax / 5;
     if ($debug >= 1) {
         print "lines = [\"" . join("\",\"", @lines) . "\"]\n";
     }
@@ -77,6 +78,14 @@ sub polish1 { # global $type, $code, $created, $author
     } elsif ($mode eq "axx") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
         if ($code =~ m{\W([Aa]$seqno) *\( *\w[^\)]*\) *\=}) { 
             $code  .= "${sep}a(n)=$1(n);"; # "$sep" is important
+            $type   = "pari_an";
+        } else {
+            $nok    = "no_$mode";
+        }
+    } elsif ($mode eq "contfrac") { 
+        if ($code =~     m{\~\~\~\~contfrac\(}) { 
+            $code   =~ s{\A\~\~\~\~}{\~\~\~\~default(realprecision,$bf_prec)\~\~};
+            $code   .= "~~VV=%;a(n)=VV[n+1-$offset]";
             $type   = "pari_an";
         } else {
             $nok    = "no_$mode";
@@ -98,7 +107,6 @@ sub polish1 { # global $type, $code, $created, $author
     #--------
     } elsif ($mode eq "decexp") { # keyword "cons"
         my $prec = 128;
-        my $bf_prec = $bfimax + $bfimax / 5;
         #                                              1   1
         if ($code =~ m{default *\( *realprecision *\, *(\d+)}) {
             $prec = $1;
