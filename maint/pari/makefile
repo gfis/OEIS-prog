@@ -50,9 +50,9 @@ pari2: # generate *.gp in the sandbox
 pari_an:
 	grep -P "\~\~ *(\{ *)?a\([A-Za-z]+[^\)]*\) *\="                 pari_nyi.tmp > pari0.tmp ; make MODE=an        pari1 pari2
 pari_axx:
-	grep -P "\~\~ *(\{ *)[Aa]\d{6}\(\w+[\,\)]"                     pari_nyi.tmp > pari0.tmp ; make MODE=axx       pari1 pari2
+	grep -P "\~\~ *(\{ *)?[Aa]\d{6}\(\w+[\,\)]"                     pari_nyi.tmp > pari0.tmp ; make MODE=axx       pari1 pari2
 pari_isaxx:
-	grep -P "\~\~ *(\{ *)?is_?[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp ; make MODE=isaxx     pari1 pari2
+	grep -P "\~\~ *(\{ *)is_?[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp ; make MODE=isaxx     pari1 pari2
 pari_isok:
 	grep -P "\~\~ *(\{ *)?is_?([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp ; make MODE=isok      pari1 pari2
 pari_contfrac:
