@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A351026 lang=pari curno=1 type=print rev=26 offset=1 bfimax=49 nstart=1 */
+for(b=18, 1785, a=q=0; until(b-2<16^(2^a), a++; if(!(kronecker(b, 16^(2^(a-1))+1)==-1), q=1; break)); if(q==1, k=b/2^valuation(b, 2); if(k>1, i=logint(k, 2); m=Mod(2, k); z=znorder(m); e=znorder(Mod(2, z/2^valuation(z, 2))); t=0; for(c=1, e, if(kronecker(lift(m^2^(i+c))+1, k)==-1, t++, break)); if(t==e, print(b)))));

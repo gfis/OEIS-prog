@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A243002 lang=pari curno=1 type=print rev=9 offset=1583 bfimax=1658 nstart=1583 */
+for(y=1583, 1658, a=lift(Mod(y, 19)); b=floor(y/100); c=lift(Mod(y, 100)); d=floor(b/4); e=lift(Mod(b, 4)); f=floor((b+8)/25); g=floor((b-f+1)/3); h=lift(Mod(19*a+b-d-g+15, 30)); i=floor(c/4); k=lift(Mod(c, 4)); l=lift(Mod(32+2*e+2*i-h-k, 7)); m=floor((a+11*h+22*l)/451); p=lift(Mod(h+l-7*m+114, 31)); if(floor((h+l-7*m+114)/31)==4, print(p+1), print(0)));

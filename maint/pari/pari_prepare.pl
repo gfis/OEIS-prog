@@ -61,7 +61,8 @@ sub polish1 { # global $type, $code, $created, $author
     my $seqno = substr($aseqno, 1);
     $code =~ s{\s+\Z}{}; # trim
     $code =~ s{\;\Z}{};  # remove trailing ";"
-    $nstart = $offset;
+    $nstart = $offset; 
+    $type = "";
     my $bf_prec = $bfimax + $bfimax / 5;
     if ($debug >= 1) {
         print "lines = [\"" . join("\",\"", @lines) . "\"]\n";
@@ -103,6 +104,20 @@ sub polish1 { # global $type, $code, $created, $author
             $code  .= "${sep}isok(n)=$1(n);";
             $type   = "pari_isok";
         } else {
+            $nok    = "no_$mode";
+        }
+    } elsif ($mode eq "print")  { # starting with or containing "for ... print1(...)"
+        #                 1       (         )1
+        while ($code =~ m{(print1\([^\(\)]+\))}) { 
+            my $print  = $1;
+            my $print1 = quotemeta($print);
+            $print =~ s{print1\( *\"[^\"]*\" *(\, *)?}{print\(}; # leading ", "
+            $print =~ s{(\, *)?\"[^\"]*\" *}{}; # trailing ", " 
+            $print =~ s{print1\(}{print\(};
+            $code  =~ s{$print1}{$print};
+            $type   = "pari_print";
+        }
+        if ($type eq "") {
             $nok    = "no_$mode";
         }
     #--------

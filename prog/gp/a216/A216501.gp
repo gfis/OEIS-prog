@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A216501 lang=pari curno=1 type=print rev=14 offset=1 bfimax=120 nstart=1 */
+for(n=1, 100, sol=0; for(x=1, 100, if(issquare(n-x*x)&&n-x*x>0, sol++; break)); for(x=1, 100, if(issquare(n-2*x*x)&&n-2*x*x>0, sol++; break)); for(x=1, 100, if(issquare(n-3*x*x)&&n-3*x*x>0, sol++; break)); for(x=1, 100, if(issquare(n-7*x*x)&&n-7*x*x>0, sol++; break)); print(sol)) /* _V. Raman_, Oct 16 2012 */

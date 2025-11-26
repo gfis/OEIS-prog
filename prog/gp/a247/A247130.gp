@@ -1,0 +1,22 @@
+/* source=https://oeis.org/A247130 lang=pari curno=1 type=print rev=29 offset=1 bfimax=61 nstart=1 */
+{;
+zv=0.0;
+forstep(n=1, 200, 2,;
+if(n%3<>0,;
+mb=moebius(n);
+if(mb<>0,;
+fa=factorint(n);
+dv=fa[, 1]; pl=#dv; ml=fa[, 2];
+g=1;
+for(i=1, pl,;
+ds=dv[i]; v=1;
+if(ds%4==1, v*=(1+ds)\2, v*=(1-ds)\2);
+for(k=1, ml[i], g*=v);
+);
+zv+=mb/g;
+print(g);
+);
+);
+);
+print();print(zv);
+};
