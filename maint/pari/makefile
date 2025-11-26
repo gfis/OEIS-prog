@@ -48,15 +48,15 @@ pari2: # generate *.gp in the sandbox
 	find     ../../sandbox/gp -type f | wc
 #----
 pari_an:
-	grep -P "\~\~ *a\([A-Za-z]+[^\)]*\) *\="               pari_nyi.tmp > pari0.tmp ; make MODE=an        pari1 pari2
+	grep -P "\~\~ *(\{ *)a\([A-Za-z]+[^\)]*\) *\="                 pari_nyi.tmp > pari0.tmp ; make MODE=an        pari1 pari2
 pari_axx:
-	grep -P "\~\~[Aa]\d{6}\(\w+[\,\)]"                     pari_nyi.tmp > pari0.tmp ; make MODE=axx       pari1 pari2
+	grep -P "\~\~ *(\{ *)?[Aa]\d{6}\(\w+[\,\)]"                     pari_nyi.tmp > pari0.tmp ; make MODE=axx       pari1 pari2
 pari_isaxx:
-	grep -P "\~\~is_?[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp ; make MODE=isaxx     pari1 pari2
+	grep -P "\~\~ *(\{ *)?is_?[Aa]\d{6}\(\w+[\,\)]"                 pari_nyi.tmp > pari0.tmp ; make MODE=isaxx     pari1 pari2
 pari_isok:
-	grep -P "\~\~is_?([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp ; make MODE=isok      pari1 pari2
+	grep -P "\~\~ *(\{ *)?is_?([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp ; make MODE=isok      pari1 pari2
 pari_contfrac:
-	grep -P "\~\~contfrac\("                               pari_nyi.tmp > pari0.tmp ; make MODE=contfrac  pari1 pari2
+	grep -P "\~\~contfrac\("                                        pari_nyi.tmp > pari0.tmp ; make MODE=contfrac  pari1 pari2
 #----
 pari_print1: # grep the ones that work with an if print1 is removed
 	grep -P "for\(n\=\d, *\d+\, *print1\(a\(n\)" pari_nyi.tmp \

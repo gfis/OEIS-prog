@@ -69,7 +69,7 @@ sub polish1 { # global $type, $code, $created, $author
     if(0) {
     #--------
     } elsif ($mode eq "an") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
-        if ($code =~ m{\~\~ *a\([A-Za-z]+[^\)]*\) *\=}) { 
+        if ($code =~ m{\~\~ *(\{ *)?a\([A-Za-z]+[^\)]*\) *\=}) { 
             $code  .= "${sep}a(n)"; # "$sep" is important
             $type   = "pari_an";
         } else {
