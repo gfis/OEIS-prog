@@ -243,9 +243,9 @@ regtest: # LIST= test a LIST of PARI programs in ../../prog/gp
 	cd $(FISCHER) ; rm -f batch.log ; make PRIO=gp PROG=$(GITS)/OEIS-prog/prog    CC=$@ test2 evaluate log
 deploy: deploy1 deploy2 # CC= move the "pass"ed ones into git repository
 deploy1:
-	cat     $(FISCHER)/$(CC).pass.log                              > $@.tmp
+	cat     $(FISCHER)/$(CC).pass.log                              > $@.tmp  || :
 	wc -l    $@.tmp
-	grep -P "\t\d\d+\tFATO\t" $(FISCHER)/$(CC).fail.log           >> $@.tmp
+	grep -P "\t\d\d+\tFATO\t" $(FISCHER)/$(CC).fail.log           >> $@.tmp  || :
 	tail -n8 $@.tmp
 	wc -l    $@.tmp
 deploy2:
