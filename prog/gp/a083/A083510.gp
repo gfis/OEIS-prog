@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A083510 lang=pari curno=1 type=print rev=8 offset=1 bfimax=47 nstart=1 */
+V = vector(5000); for (i = 1, 5000, V[i] = 1 + binomial(i, 2)); count = 0; i = 1; while (count < 50, i++; found = 0; j = i - 1; k = i + 1; x = 2*V[i]; while (!found && j, if (V[j] + V[k] > x, j--, if (V[j] + V[k] < x, k++, found = 1))); if (found, count++; print(V[i]))); /* _David Wasserman_, Nov 18 2004*/

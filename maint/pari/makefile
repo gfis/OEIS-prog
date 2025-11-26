@@ -58,8 +58,7 @@ pari_isaxx:
 pari_isok:
 	grep -P "\~\~ *(\{ *)?is_?([A-Za-z]*|[A-Za-z]*\d)\(\w+[\,\)]"   pari_nyi.tmp > pari0.tmp ; make MODE=isok      pari1 pari2
 pari_print:
-	grep -P "\~\~ *(\{ *)?for"  pari_nyi.rest.tmp \
-	| grep -P "print1\("                                                         > pari0.tmp ; make MODE=print     pari1 pari2
+	grep -P "print1\("                                  pari_nyi.rest.tmp        > pari0.tmp ; make MODE=print     pari1 pari2
 #----
 pari_print1: # grep the ones that work with an if print1 is removed
 	grep -P "for\(n\=\d, *\d+\, *print1\(a\(n\)" pari_nyi.tmp \

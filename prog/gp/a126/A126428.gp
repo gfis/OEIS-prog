@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A126428 lang=pari curno=1 type=print rev=21 offset=1 bfimax=2000 nstart=1 */
+{m=48; u=[]; s=Set(); k=0; for(n=1, m, b=1; while(b, b=0; k++; j=0; while(!b&&j<#u, j++; if(setsearch(s, k-u[j])||setsearch(s, k+u[j]), b=1))); print(k); if(n<m, v=vector(#u, j, k-u[j]); w=vector(#u, j, k+u[j]); s=setunion(s, Set(concat(v, w))); u=concat(u, k)))} /* _Klaus Brockhaus_, Sep 05 2007 */

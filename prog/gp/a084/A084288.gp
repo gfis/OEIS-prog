@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A084288 lang=pari curno=1 type=print rev=13 offset=1 bfimax=32 nstart=1 */
+A = matrix(50, 50); for (i = 1, 50, A[1, i] = 2^(i - 1)); for (j = 2, 50, count = 0; p = prime(j); for (d = 1, j, for (x = 1, d, y = d + 1 - x; count++; if (count <= 50, A[j, count] = p*A[x, y]))); d = j; while (count < 50, d++; for (x = 1, j, y = d + 1 - x; count++; if (count <= 50, A[j, count] = p*A[x, y])))); for (d = 1, 50, s = 0; for (y = 1, d, x = d + 1 - y; s += A[x, y]); print(s)); /* _David Wasserman_, Dec 13 2004*/

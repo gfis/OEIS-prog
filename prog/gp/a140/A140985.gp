@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A140985 lang=pari curno=1 type=print rev=8 offset=1 bfimax=1000 nstart=1 */
+{m=40; A=matrix(m,m); k=1; for(j=1, m, A[j, k]=j-1); print(A[1, k]); for(k=2, m, print(A[1, k]=A[2, k-1]); s=Set(A[1, k]); for(j=2, m-k+1, e=A[j-1, k]-A[j+1, k-1]; if((e>0)&&!setsearch(s, e), A[j,k]=e, A[j, k]=A[j-1, k]+A[j+1, k-1]); s=setunion(s, Set(A[j,k]))))} /* _Klaus Brockhaus_, Aug 05 2008*/

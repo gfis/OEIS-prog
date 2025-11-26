@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A094768 lang=pari curno=1 type=print rev=17 offset=1 bfimax=729 nstart=1 */
+{m=5; h=2*m-1; A=matrix(h, h); print(A[m, m]=1); pj=m; pk=m; T=[[1, 0], [0, -1], [ -1, 0], [0, 1]]; for(n=1, (h-2)^2-1, g=sqrtint(n); r=(g+g%2)\2; q=4*r^2; d=n-q; if(n<=q-2*r, j=d+3*r; k=r, if(n<=q, j=r; k=-d-r, if(n<=q+2*r, j=r-d; k=-r, j=-r; k=d-3*r))); j=j+m; k=k+m; s=A[pj, pk]; for(c=1, 4, v=[pj, pk]; v+=T[c]; s=s+A[v[1], v[2]]); A[j, k]=s; print(s); pj=j; pk=k)} /* _Klaus Brockhaus_, Aug 27 2008*/

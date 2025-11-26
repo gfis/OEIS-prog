@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A237662 lang=pari curno=1 type=print rev=14 offset=1 bfimax=48 nstart=1 */
+n=10^5;e=89;a=1;if(a%2==0,a=a+1);b=ceil(log(n)/log(2));i=0;d=floor(b^(2.5));v=vector(d);for(n=0,b,for(p=a,b,if(n==0,x=p,x=b);forstep(m=a,x,2,c=2^(n+m+p+1)-2^(m+p+1)+2^(p+1)+m-2;if(isprime(c),i++;v[i]=c))));w=vecsort(v,,8);u=vector(#(w)-1);for(j=1,#(w)-1,u[j]=w[j+1]);if(e>#(u),e=#(u));s=vector(e);for(k=1,e,s[k]=u[k];print(s[k]));

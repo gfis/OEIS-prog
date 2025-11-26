@@ -1,0 +1,3 @@
+/* source=https://oeis.org/A220952 lang=pari curno=1 type=print rev=93 offset=0 bfimax=15624 nstart=0 */
+isAdj(a,b)={a=Vec(digits(min(a,b),5),-#b=concat(0,digits(max(a,b),5))); normlp(a-b,1)<2 && !for(j=2,#b, for(i=1,j-1, if(a[i]==b[i], !a[i] || a[i]==4 || (a[i]==3 && min(a[j],b[j])) || (a[i]==1 && max(a[j],b[j])<4) || (a[i]==2 && !#setminus(Set([a[j],b[j]]),[1,2,3])) || a[j]==b[j], (!a[j] && min(a[i],b[i])) || (a[j]==4 && max(a[i],b[i])<4) || (a[j]==1 && Set([a[i],b[i]])==[2,3]) || (a[j]==3 && Set([a[i],b[i]])==[1,2]) || a[i]==b[i]) || return))};
+u=[];for(n=a=0,100,print(a);u=setunion(u,[a]); while(#u>1&&u[2]==u[1]+1,u=u[^1]); for(k=u[1]+1,oo,!setsearch(u,k)&&isAdj(a,k)&&(a=k)&&next(2))) /* _M. F. Hasler_, Mar 13 2018*/

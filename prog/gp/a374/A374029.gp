@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A374029 lang=pari curno=2 type=print rev=13 offset=1 bfimax=28 nstart=1 */
+my(P=List(11), base=2); my(m = vecprod(Vec(P))); my(L = znorder(Mod(base, m))); print(P[1]); while(1, forstep(p=lift(1/Mod(m, L)), oo, L, if(p > P[#P] && isprime(p) && base % p != 0, if((m*p-1) % znorder(Mod(base, p)) == 0, print(p); listput(P, p); L = lcm(L, znorder(Mod(base, p))); m *= p; break)))); /* _Daniel Suteu_, Jun 30 2024*/

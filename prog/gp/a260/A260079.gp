@@ -1,0 +1,19 @@
+/* source=https://oeis.org/A260079 lang=pari curno=1 type=print rev=28 offset=1 bfimax=18 nstart=1 */
+;
+{;
+p=vector(50,n,prime(n));i=1;
+while(1,;
+P=prod(j=1,2*i,p[j]);Q=sqrt(P);r=10^1000;
+m=prod(j=1,i,p[j]);a=vectorsmall(2*i-1);
+for(j=1,i,a[j]=1);b=vectorsmall(2*i-1);
+for(j=i,2*i-1,b[j]=1);while(1,;
+if(m>Q,if(m<r,r=m),if(P/m<r,r=P/m));
+if(a==b,;
+print(r);break(),;
+k=1;if(a[1]==0,;
+while(a[k]==0,k++);c=1;
+while(a[k+1],m*=p[c]/p[k];a[c]=1;a[k]=0;c++;k++);
+a[k]=0;a[k+1]=1;m*=p[k+1]/p[k],;
+while(a[k+1],k++);a[k]=0;a[k+1]=1;m*=p[k+1]/p[k])));
+i++);
+};

@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A259236 lang=pari curno=1 type=print rev=13 offset=1 bfimax=1000 nstart=1 */
+{ dmx=1000; d=vector(dmx); b=10; for(i=1,b-1,d[i]=i;print(i)); di=b-1; n=di; while(di<dmx, n++; dig=digits(n,b); dii=1; ok=0; for(i=1,di-#dig+1, while(dii<#dig && d[i+dii-1]==dig[dii], dii++); if(dii==#dig && d[i+dii-1]==dig[dii], ok=1; i=di-#dig+1, dii=1); ); if(ok, print(n); for(i=1,#dig, di++; if(di<=dmx, d[di]=dig[i]) ); ); ); };
