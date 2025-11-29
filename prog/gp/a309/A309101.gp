@@ -1,0 +1,3 @@
+/* source=https://oeis.org/A309101 lang=pari curno=1 type=isok rev=27 offset=1 bfimax=44 nstart=1 */
+cut(d, b) = {my(nb = hammingweight(b), vs = vector(nb+1, k, ""), iz = 0, ind = 1); for (i=1, #d, if (d[i] == 0, iz ++; if (b[iz], ind++, vs[ind] = concat(vs[ind], d[i])), vs[ind] = concat(vs[ind], d[i]););); apply(x->eval(x), vs);};
+isok(n) = {if (isprime(n), my(d = digits(n), dz = select(x->(x==0), d, 1), nbz = #dz); if (! nbz, return (0)); if (nbz > 1, for (k=2, #dz, if (dz[k] == dz[k-1] + 1, return (0)););); for (i=1, 2^nbz-1, my(b = binary(i)); while (#b < nbz, b = concat(0, b)); my(vstr = cut(d, b)); if (#select(x->isprime(x), vstr) == #vstr, return (1));););};

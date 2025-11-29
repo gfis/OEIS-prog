@@ -1,13 +1,13 @@
 #!perl
 
 # Prepare PARI programs to be called by PariSequence
-# 2025-11-17, Georg Fischer: copied from pari_decexp.pl 
+# 2025-11-17, Georg Fischer: copied from pari_decexp.pl
 #:#
 #:# Usage:
 #:#   perl pari_prepare.pl [-m mode] input.seq4 > output.seq4 2> output.rest.tmp
 #:#       implemented modes:
 #:#         decexp   for keyword "cons", insert realprecision and emit single digits
-#:#         Ann      starting with or containing "Annnnnn(n) = ..." - append "a(n)=Annnnnn(n);" 
+#:#         Ann      starting with or containing "Annnnnn(n) = ..." - append "a(n)=Annnnnn(n);"
 #:#
 #:#
 #:#
@@ -61,7 +61,7 @@ sub polish1 { # global $type, $code, $created, $author
     my $seqno = substr($aseqno, 1);
     $code =~ s{\s+\Z}{}; # trim
     $code =~ s{\;\Z}{};  # remove trailing ";"
-    $nstart = $offset; 
+    $nstart = $offset;
     $type = "";
     my $bf_prec = $bfimax + $bfimax / 5;
     if ($debug >= 1) {
@@ -70,21 +70,21 @@ sub polish1 { # global $type, $code, $created, $author
     if(0) {
     #--------
     } elsif ($mode eq "an") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
-        if ($code =~ m{\~\~ *(\{ *)?a\([A-Za-z]+[^\)]*\) *\=}) { 
+        if ($code =~ m{\~\~ *(\{ *)?a\([A-Za-z]+[^\)]*\) *\=}) {
             $code  .= "${sep}a(n)"; # "$sep" is important
             $type   = "pari_an";
         } else {
             $nok    = "no_$mode";
         }
     } elsif ($mode eq "axx") { # starting with or containing "[Aa]xxxxxx(n) = ..."?
-        if ($code =~ m{\W([Aa]$seqno) *\( *\w[^\)]*\) *\=}) { 
+        if ($code =~ m{\W([Aa]$seqno) *\( *\w[^\)]*\) *\=}) {
             $code  .= "${sep}a(n)=$1(n);"; # "$sep" is important
             $type   = "pari_an";
         } else {
             $nok    = "no_$mode";
         }
-    } elsif ($mode eq "contfrac") { 
-        if ($code =~     m{\~\~\~\~contfrac\(}) { 
+    } elsif ($mode eq "contfrac") {
+        if ($code =~     m{\~\~\~\~contfrac\(}) {
             $code   =~ s{\A\~\~\~\~}{\~\~\~\~default(realprecision,$bf_prec)\~\~};
             $code   .= "~~VV=%;a(n)=VV[n+1-$offset]";
             $type   = "pari_an";
@@ -92,15 +92,26 @@ sub polish1 { # global $type, $code, $created, $author
             $nok    = "no_$mode";
         }
     } elsif ($mode eq "isaxx") { # starting with or containing "is[Aa]xxxxxx(n"
-        if ($code =~ m{(is_?[Aa]$seqno) *\( *\w+}) { 
+        if ($code =~ m{(is_?[Aa]$seqno) *\( *\w+}) {
             $code  .= "${sep}isok(n)=$1(n);";
             $type   = "pari_isok";
         } else {
             $nok    = "no_$mode";
         }
     } elsif ($mode eq "isok")  { # starting with or containing "isOk(n"
-        #              1    2            21   
-        if ($code =~ m{(is_?([A-Za-z]*|\d)) *\( *\w+}i) { 
+        #              1    2             21
+        if ($code =~ m{(is_?([A-Za-z]*|\d*)) *\( *\w+}i) { 
+            my $myis = $1;
+            if ($myis ne "isok") {
+                $code  .= "${sep}isok(n)=$myis(n);";
+            }
+            $type   = "pari_isok";
+        } else {
+            $nok    = "no_$mode";
+        }
+    } elsif ($mode eq "list")  { # lists and vectors
+        #              1    2            21
+        if ($code =~ m{(is_?([A-Za-z]*|\d)) *\( *\w+}i) {
             $code  .= "${sep}isok(n)=$1(n);";
             $type   = "pari_isok";
         } else {
@@ -108,11 +119,11 @@ sub polish1 { # global $type, $code, $created, $author
         }
     } elsif ($mode eq "print")  { # starting with or containing "for ... print1(...)"
         #                 1       (         )1
-        while ($code =~ m{(print1\([^\(\)]+\))}) { 
+        while ($code =~ m{(print1\([^\(\)]+\))}) {
             my $print  = $1;
             my $print1 = quotemeta($print);
             $print =~ s{print1\( *\"[^\"]*\" *(\, *)?}{print\(}; # leading ", "
-            $print =~ s{(\, *)?\"[^\"]*\" *}{}; # trailing ", " 
+            $print =~ s{(\, *)?\"[^\"]*\" *}{}; # trailing ", "
             $print =~ s{print1\(}{print\(};
             $code  =~ s{$print1}{$print};
             $type   = "pari_print";

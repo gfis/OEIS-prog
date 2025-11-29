@@ -1,0 +1,2 @@
+/* source=https://oeis.org/A385145 lang=pari curno=1 type=isok rev=19 offset=1 bfimax=30 nstart=1 */
+isok(k) = my(d=digits(k)); if (!vecmin(d), return(0)); if (#Set(d) == 1, return(0)); if (#d % 2, my(ii = #d\2); my(d1=vector(ii, kk, d[kk]), d2 = vector(#d-ii, kk, d[kk+ii])); ii++; my(d3=vector(ii, kk, d[kk]), d4 = vector(#d-ii, kk, d[kk+ii])); if (fromdigits(d1)*fromdigits(d2) == fromdigits(d3)*fromdigits(d4), return(1)););
